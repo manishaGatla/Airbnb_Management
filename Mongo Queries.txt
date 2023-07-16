@@ -1,0 +1,58 @@
+use('Airbnb_Management');
+db.createCollection('Airbnb_Accounts');
+db.createCollection('Airbnb_Admins');
+db.createCollection('Airbnb_Hosts');
+db.createCollection('Airbnb_Guests');
+db.createCollection('Airbnb_Booking');
+db.createCollection('Airbnb_Roles');
+db.createCollection('Airbnb_Listings');
+db.createCollection('Airbnb_RoomTypes');
+db.createCollection('Airbnb_Amenities');
+db.createCollection('Airbnb_Statuses');
+db.createCollection('Airbnb_Payments');
+
+
+
+
+db.Airbnb_RoomTypes.insertMany([
+    { name: "Entire home/apt" },
+    { name: "Private room" },
+    { name: "Shared room" }
+  ])
+
+  db.Airbnb_Amenities.insertMany([
+      { name: "Wi-Fi" },
+      { name: "Air conditioning" },
+      { name: "Heating" },
+      { name: "Kitchen" },
+      { name: "TV" },
+      { name: "Washing machine" },
+      { name: "Parking" },
+      { name: "Elevator" },
+    ])
+    
+    db.Airbnb_Statuses.insertMany([
+        { name: "Pending", description: "Stay request is pending approval" },
+        { name: "Approved", description: "Stay request has been approved" },
+        { name: "Cancelled", description: "Stay request has been cancelled" },
+        { name: "Completed", description: "Stay has been completed" }
+      ])
+  
+    
+  
+
+
+db.Airbnb_Roles.insertMany(
+    [{id: 1, roleTitle : 'Admin'},{id: 2, roleTitle : 'Host'},{id: 3, roleTitle : 'Guest'}]
+)
+
+
+db.Airbnb_Admins.insertOne(
+    {
+        name: "Manisha",
+        password: "manishagatla123",
+        phoneNumber: "1222233344",
+        email: "manishagatla181997@gmail.com"
+    }
+)
+
