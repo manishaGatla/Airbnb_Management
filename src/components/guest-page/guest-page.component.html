@@ -1,0 +1,195 @@
+<section class="">
+
+    <section *ngIf="!isSearchClicked && !showDetailsView && !viewStaysClicked"
+        class="my-dialog container search-attributes mr-l-20">
+        <section class="wd-50 tile">
+            <div class=" mr-t-20">
+                <label for="country" class="mr-r-100">Country:</label>
+                <input type="text" id="country" name="country" class="input-attributes"
+                    [(ngModel)]="searchForm.country">
+            </div>
+
+            <div class=" mr-t-20">
+                <label for="city" class="mr-r-124">City:</label>
+                <input type="text" id="city" class="input-attributes" name="city" [(ngModel)]="searchForm.city">
+            </div>
+
+            <div class=" mr-t-20">
+                <label for="minPrice" class=" mr-r-86">Min Price:</label>
+                <input type="number" id="minPrice" class="input-attributes" name="minPrice"
+                    [(ngModel)]="searchForm.minPrice">
+            </div>
+            <div class=" mr-t-20">
+                <label for="maxPrice" class=" mr-r-86">Max Price:</label>
+                <input type="number" id="maxPrice" class="input-attributes" name="maxPrice"
+                    [(ngModel)]="searchForm.maxPrice">
+
+            </div>
+            <div class=" mr-t-20">
+                <button type="submit" class="mr-t-20 btn-attributes" (click)="searchStays()">Search</button>
+                <button type="submit" class="mr-t-20 btn-attributes" (click)="viewStaysReservedByUser()">View Reserved
+                    Stays</button>
+            </div>
+        </section>
+
+        <section class="wd-50 tile">
+            <div class="mr-t-20">
+                <label for="amenities">Amenities:</label>
+                <div class="mr-t-20" *ngFor="let amenity of amenities">
+                    <label class="mr-l-10">
+                        <input type="checkbox" class="scale-1" [(ngModel)]="amenity.checked">
+                        {{ amenity.name }}
+                    </label>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    <section *ngIf="viewStaysClicked && staysReserved && !showDetailsView && staysReserved.length > 0 ">
+        <span *ngFor="let stay of staysReserved" class="inline-style">
+            <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+        </span>
+        <div>
+
+            <button class="mr-t-20 btn-attributes" (click)="resetFields()">Back</button>
+        </div>
+    </section>
+
+    <section *ngIf="isSearchClicked && !showDetailsView" class="mr-l-20">
+        <span *ngFor="let stay of staysAvaliable" class="inline-style">
+            <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+        </span>
+        <div>
+            <button class="mr-t-20 btn-attributes" (click)="resetFields()">Back</button>
+        </div>
+    </section>
+
+
+    <section *ngIf="showDetailsView && !isBookingClicked" class="mr-l-20">
+        <div class="details-container">
+            <div class="image-section">
+                <img class="img-attributes inline-style" [src]="stayDetails.imgUrl" alt="Stay Image">
+            </div>
+            <div class="details-section">
+                <h2>{{ stayDetails.description }}</h2>
+            </div>
+
+        </div>
+        <div class="details-container">
+            <div class="details-section1">
+                <div class="flex-1">
+                    <p>Price: {{ stayDetails.price }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Room Type: {{ stayDetails.roomType }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Amenities: {{ stayDetails.amenities.join(', ') }}</p>
+                </div>
+            </div>
+            <div class="details-section1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1">
+                    <p>Street: {{ stayDetails.street }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>City: {{ stayDetails.city }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>State: {{ stayDetails.state }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Country: {{ stayDetails.country }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Check In : {{stayDetails.checkIn | date}}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Check Out : {{stayDetails.checkOut |date}}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Host Name: {{stayDetails.hostName }}</p>
+                </div>
+                <div class="flex-1">
+                    <p>Host Contact : {{stayDetails.hostPhone}}</p>
+                </div>
+            </div>
+        </div>
+
+        <button *ngIf="!viewStaysClicked" class="mr-t-20" name="bookNow" class="btn-attributes"
+            (click)="OnStayBookingClicked()">Book Now</button>
+        <button *ngIf="!viewStaysClicked" class="mr-t-20 btn-attributes" (click)="resetFields()">Back</button>
+
+        <button *ngIf="viewStaysClicked" class="mr-t-20 btn-attributes" (click)="backClicked()">Back</button>
+
+    </section>
+
+    <section *ngIf="isBookingClicked && !isAddNewAccountClicked" class="mr-l-20">
+
+        <div class="mr-t-20">
+            <h2>Enter payment details</h2>
+        </div>
+        <div class="mr-t-20" *ngIf="accountsAvaliable && accountsAvaliable.length > 0">
+            <label>Choose Card</label>
+            <select class="select-attributes" [(ngModel)]="cardSelected">
+                <option *ngFor="let account of accountsAvaliable" [value]="account._id">{{ account.cardNumber }}
+                </option>
+            </select>
+
+        </div>
+
+        <div class="mr-t-20">
+            <button type="submit" *ngIf="isBookingClicked && accountsAvaliable &&  accountsAvaliable.length > 0"
+                [disabled]="!cardSelected" class="btn-attributes" (click)="bookNowAction()">Ok</button>
+            <button type="submit" [disabled]="cardSelected" class="btn-attributes"
+                (click)="onAddNewAccountClicked()">Add
+                New Account</button>
+            <button class="btn-attributes" (click)="resetFields()">Back</button>
+        </div>
+    </section>
+
+    <section *ngIf="isAddNewAccountClicked">
+        <div class="mr-t-20">
+            <h2>Enter Account details</h2>
+        </div>
+
+        <div class="mr-t-20">
+            <label>Choose Account Type</label>
+            <select class="select-attributes" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
+                <option value="credit">Credit Card</option>
+                <option value="debit">Debit Card</option>
+            </select>
+        </div>
+
+
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-103">Card Number</label>
+            <input type="text" id="cardNumber" (input)="validateCardNumber($event)" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="cardNumber" required>
+        </div>
+
+        <div class="cardNo-attributes" *ngIf="!isCardNumberValid">Invalid Card Number</div>
+
+        <div class="mr-t-20">
+            <label for="expirationDate" class="mr-r-35">Expiration Date(mm/yy)</label>
+            <input type="text" id="expirationDate" (input)="validateExpiryDate($event)" name="expirationDate"
+                class="input-attributes" [(ngModel)]="expireDate" required>
+        </div>
+        <div class="cardNo-attributes" *ngIf="!isDateValid">Invalid Date Format</div>
+        <div class="cardNo-attributes" *ngIf="isDateValid && !isMonthValid">Invalid Month</div>
+        <div class="cardNo-attributes" *ngIf="isDateValid && isMonthValid && !isFutureDate">Expiry Date Must be a Future
+            Date</div>
+
+        <div class="mr-t-20">
+            <label for="cvv" class="mr-r-156">CVV</label>
+            <input type="text" id="cvv" name="cvv" (input)="validateCvv($event)" class="input-attributes"
+                [(ngModel)]="cvv" required>
+        </div>
+        <div class="cardNo-attributes" *ngIf="!isCvvValid">Invalid CVV</div>
+
+        <div class="mr-t-20">
+            <button type="submit" class="btn-attributes" (click)="bookNowAction()">Ok</button>
+            <button class="mr-t-20 btn-attributes" (click)="resetFields()">Back</button>
+        </div>
+
+    </section>

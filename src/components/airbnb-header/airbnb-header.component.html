@@ -1,0 +1,19 @@
+<section class="container">
+    <div class="image-section">
+        <img [src]='imgSrc' class="img-Attributes" alt="Airbnb logo">
+    </div>
+    <div>
+        <login-page></login-page>
+    </div>
+</section>
+<section *ngIf="airbnbService.isLoginSuccessful && airbnbService.checkIsVisible()">
+    <section *ngIf="airbnbService.isGuest">
+        <guest-page></guest-page>
+    </section>
+    <section *ngIf="airbnbService.isHost">
+        <host-page></host-page>
+    </section>
+    <section *ngIf="airbnbService.isAdmin">
+        <admin-page></admin-page>
+    </section>
+</section>

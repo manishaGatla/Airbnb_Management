@@ -1,0 +1,198 @@
+.my-dialog {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border: 1px solid #5a5555;
+  background-color: #ffffff54;
+  box-shadow: 5px 5px 10px rgb(170 82 82 / 53%)
+}
+
+.login-btn {
+  top: 50%;
+  left: 15%;
+  width: 750px;
+}
+
+.register-btn {
+  left: 50%;
+  top: 45%;
+  width: 91%;
+}
+
+.component-background {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.5);
+  /* Adjust the background color and opacity as needed */
+}
+
+
+.style-attributes {
+  text-align: center;
+  font-size: 45px !important
+}
+
+.align-center {
+  text-align: center;
+}
+
+.mr-b-20 {
+  margin-bottom: 20px;
+}
+
+.label-attributes {
+  margin-right: 10px;
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.textBox-attributes {
+  width: 300px;
+  height: 45px;
+}
+
+.input-attributes {
+  width: 395px !important;
+  height: 40px !important;
+}
+
+.mr-r-43 {
+  margin-right: 43px !important;
+}
+
+.btn-attributes {
+  margin-right: 30px !important;
+  width: 150px;
+  height: 35px;
+  background-color: rgb(103 166 240);
+  border: none;
+}
+
+.dd-attributes {
+  width: 300px;
+  height: 45px;
+}
+
+.password-toggle-icon {
+  font-family: "Font Awesome 5 Free";
+  cursor: pointer;
+  margin-left: -27px;
+}
+
+.mr-l-50 {
+  margin-left: 50px !important;
+}
+
+.mr-r-90 {
+  margin-right: 90px !important;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: large;
+}
+
+.mr-style {
+  margin-right: 30px;
+
+}
+
+.mr-l-420 {
+  margin-left: 420px !important;
+}
+
+.mr-l--20 {
+  margin-left: -428px !important;
+}
+
+.phNo-attributes {
+  margin-left: 142px;
+  color: red;
+}
+
+.required-symbol {
+  color: red;
+}
+
+.mr-r-103 {
+  margin-right: 103px !important;
+}
+
+.mr-r-89 {
+  margin-right: 89px !important;
+}
+
+.mr-r-20 {
+  margin-right: 20px;
+}
+
+.mr-r-156 {
+  margin-right: 156px !important;
+}
+
+.mr-t-20 {
+  margin-top: 20px;
+}
+
+.inline-style {
+  display: inline-flex;
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(235, 229, 229, 0.3098039216);
+  box-shadow: 5px 6px 2px #b6b3ca;
+}
+
+.card-att {
+  font-size: larger;
+  width: 700px !important;
+  height: 100px !important;
+  padding: 20px !important;
+}
+
+
+.mr-r-35 {
+  margin-right: 35px;
+}
+
+.cardNo-attributes {
+  margin-left: 190px;
+  color: red;
+}
+
+.select-attributes {
+  margin-left: 30px !important;
+  width: 400px;
+  height: 40px;
+}
+
+body {
+  background-image: url('https://a0.muscache.com/im/pictures/prohost-api/Hosting-52254969/original/63a326b2-df8c-4f38-bca0-8d37d6dfc70e.jpeg?im_w=720');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.mr-l-400 {
+  margin-left: 400px;
+}
+
+.icon-attributes {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.mr-l-550 {
+  margin-left: 550px !important;
+}
+
+.mr-l-103 {
+  margin-left: 103px !important;
+}

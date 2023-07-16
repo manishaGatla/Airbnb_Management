@@ -1,0 +1,108 @@
+.mr-t-20 {
+    margin-top: 20px !important;
+}
+
+.btn-attributes {
+    margin-right: 30px !important;
+    width: 150px;
+    height: 35px;
+    background-color: rgb(103 166 240);
+    border: none;
+}
+
+.scale-1 {
+    scale: 1.5;
+}
+
+.input-attributes {
+    width: 395px !important;
+    height: 40px !important;
+}
+
+.select-attributes {
+    margin-left: 30px !important;
+    width: 400px;
+    height: 40px;
+}
+
+.img-attributes {
+    width: 300px;
+    height: 300px;
+}
+
+.details-container {
+    display: flex;
+    width: 100%;
+}
+
+.image-section {
+    flex: 0 0 30%;
+
+}
+
+.details-section1 {
+    flex: 0 0 40%;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    background: rgb(189 184 223 / 56%);
+    margin: 10px;
+    padding: 10px;
+
+}
+
+.details-section2 {
+    flex: 0 0 25%;
+}
+
+.details-section {
+    margin-top: 10px !important;
+    display: flex;
+    flex: 0 0 70%;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    background: #e1e0e952;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.inline-style {
+    display: inline-flex;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    box-shadow: 5px 6px 2px #b6b3ca;
+}
+
+.mr-20 {
+    margin: 20px !important;
+}
+
+.txtbox-attributes {
+    width: 438px;
+    height: 86px;
+}
+
+.mr-l-30 {
+    margin-left: 30px;
+}
+
+.mr-r-10 {
+    margin-right: 10px !important;
+}
+
+.url-attributes {
+    margin-left: 585px;
+    color: red;
+}
+
+.required-symbol {
+    color: red;
+}
+
+.my-dialog {
+    padding: 20px;
+    border: 1px solid #999393;
+    background-color: #f1e4e45e;
+    box-shadow: 4px 4px 10px rgb(172 72 72 / 55%);
+}

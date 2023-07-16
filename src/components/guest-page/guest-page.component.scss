@@ -1,0 +1,153 @@
+.my-dialog {
+    padding: 20px;
+    border: 1px solid #999393;
+    background-color: #f1e4e45e;
+    box-shadow: 4px 4px 10px rgb(172 72 72 / 55%);
+}
+
+.wd-300 {
+    width: 300px !important;
+}
+
+.mr-t-20 {
+    margin-top: 20px !important;
+}
+
+.mr-r-20 {
+    margin-right: 20px !important;
+}
+
+.btn-attributes {
+    margin-right: 30px !important;
+    width: 150px;
+    height: 35px;
+    background-color: rgb(103 166 240);
+    border: none;
+}
+
+.input-attributes {
+    width: 395px !important;
+    height: 40px !important;
+}
+
+.mr-r-35 {
+    margin-right: 35px;
+}
+
+.img-attributes {
+    width: 300px !important;
+    height: 300px !important;
+}
+
+
+.mr-r-100 {
+    margin-right: 100px !important;
+}
+
+.mr-r-124 {
+    margin-right: 124px !important;
+}
+
+.mr-l-20 {
+    margin-left: 20px;
+}
+
+.mr-r-86 {
+    margin-right: 86px !important;
+}
+
+.scale-1 {
+    scale: 1.5;
+}
+
+.mr-l-10 {
+    margin-left: 10px;
+}
+
+.select-attributes {
+    margin-left: 30px !important;
+    width: 400px;
+    height: 40px;
+}
+
+.mr-r-103 {
+    margin-right: 103px !important;
+}
+
+.mr-r-89 {
+    margin-right: 89px !important;
+}
+
+.mr-r-156 {
+    margin-right: 156px !important;
+}
+
+.inline-style {
+    display: inline-flex;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    box-shadow: 5px 6px 2px #b6b3ca;
+}
+
+.search-attributes {
+    position: fixed;
+    left: 3%;
+    top: 20%;
+    width: 90%;
+}
+
+
+.container {
+    display: flex;
+}
+
+.tile {
+    flex: 1;
+    /* Additional styles for the tile */
+}
+
+.cardNo-attributes {
+    margin-left: 190px;
+    color: red;
+}
+
+.wd-50 {
+    width: 50%;
+}
+
+.details-container {
+    display: flex;
+    width: 100%;
+}
+
+.image-section {
+    flex: 0 0 30%;
+
+}
+
+.details-section1 {
+    flex: 0 0 40%;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    background: rgb(189 184 223 / 56%);
+    margin: 10px;
+    padding: 10px;
+
+}
+
+.details-section2 {
+    flex: 0 0 25%;
+}
+
+.details-section {
+    margin-top: 10px !important;
+    display: flex;
+    flex: 0 0 70%;
+    border: 1px solid rgba(235, 229, 229, 0.3098039216);
+    background: #e1e0e952;
+}
+
+.flex-1 {
+    flex: 1;
+}

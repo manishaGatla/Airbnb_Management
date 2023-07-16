@@ -1,0 +1,102 @@
+<section *ngIf="!showDetailsView && pendingStays.length > 0">
+  <h2>Pending stays for Approval</h2>
+  <span *ngFor="let stay of pendingStays" class="inline-style">
+    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+  </span>
+</section>
+
+<section *ngIf="!showDetailsView && approvedStays.length > 0">
+  <h2>Approved Stays</h2>
+  <span *ngFor="let stay of approvedStays" class="inline-style">
+    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+  </span>
+</section>
+
+<section *ngIf="!showDetailsView && cancelledStays.length > 0">
+  <h2>Cancelled Stays</h2>
+  <span *ngFor="let stay of cancelledStays" class="inline-style">
+    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+  </span>
+</section>
+
+<section *ngIf="!showDetailsView && reservedStays.length > 0">
+  <h2>Reserved Stays</h2>
+  <span *ngFor="let stay of reservedStays" class="inline-style">
+    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
+  </span>
+</section>
+
+
+<section *ngIf="showDetailsView">
+  <div class="details-container">
+    <div class="image-section">
+      <img class="img-attributes inline-style" [src]="stayDetails.imgUrl" alt="Stay Image">
+    </div>
+    <div class="details-section">
+      <h2>{{ stayDetails.description }}</h2>
+    </div>
+
+  </div>
+  <div class="details-container">
+    <div class="details-section1">
+      <div class="flex-1">
+        <p>Price: {{ stayDetails.price }}</p>
+      </div>
+      <div class="flex-1">
+        <p>Room Type: {{ stayDetails.roomType }}</p>
+      </div>
+      <div class="flex-1">
+        <p>Amenities: {{ stayDetails.amenities.join(', ') }}</p>
+      </div>
+      <div class="flex-1">
+        <p>status : {{stayDetails.status }}</p>
+      </div>
+      <div class="flex-1" *ngIf="stayDetails.guestId">
+        <p>Guest Name: {{stayDetails.guestName }}</p>
+      </div>
+      <div class="flex-1" *ngIf="stayDetails.guestId">
+        <p>Guest Contact : {{stayDetails.guestPhone}}</p>
+      </div>
+      <div class="flex-1" *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'">
+        <label for="roomType">Update Status <span class="required-symbol">*</span>:</label>
+        <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="statusId">
+          <option *ngFor="let item of statuses" [value]="item._id">{{ item.name }}</option>
+        </select>
+      </div>
+
+      <div class="flex-1 mr-t-20">
+        <button *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'" class="btn-attributes"
+          (click)="updateStay(stayDetails)">Update</button>
+        <button class="btn-attributes" (click)="resetFields()">Back</button>
+      </div>
+    </div>
+    <div class="details-section1">
+      <div class="flex-1">
+        <p>Street: {{ stayDetails.street }}</p>
+      </div>
+      <div class="flex-1">
+        <p>City: {{ stayDetails.city }}</p>
+      </div>
+      <div class="flex-1">
+        <p>State: {{ stayDetails.state }}</p>
+      </div>
+      <div class="flex-1">
+        <p>Country: {{ stayDetails.country }}</p>
+      </div>
+      <div class="flex-1">
+        <p>Check In : {{stayDetails.checkIn | date}}</p>
+      </div>
+      <div class="flex-1">
+        <p>Check Out : {{stayDetails.checkOut |date}}</p>
+      </div>
+      <div class="flex-1" *ngIf="stayDetails.hostId">
+        <p>Host Name: {{stayDetails.hostName }}</p>
+      </div>
+      <div class="flex-1" *ngIf="stayDetails.hostId">
+        <p>Host Contact : {{stayDetails.hostPhone}}</p>
+      </div>
+    </div>
+  </div>
+
+
+</section>

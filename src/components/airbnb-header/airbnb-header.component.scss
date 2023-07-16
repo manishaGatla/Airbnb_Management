@@ -1,0 +1,44 @@
+.img-Attributes {
+  height: 100px !important;
+  padding: 30px !important;
+}
+
+
+.mr-attribute {
+  margin-left: 950px;
+  margin-top: 50px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.image-section {
+  flex: 0 0 30%;
+
+}
+
+.dropdown-toggle {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.buttons-section {
+  display: flex;
+  flex: 0 0 70%;
+}
+
+.dropdown-menu {
+  background-color: #c0bfc8;
+  width: 100px;
+  height: 150px;
+}
+
+.dropdown-item {
+  height: 36px;
+  padding: 5px;
+  margin: 5px;
+  border-bottom: 1px solid #00000047;
+  color: blue;
+}

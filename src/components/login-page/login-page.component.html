@@ -1,0 +1,178 @@
+<section>
+
+    <section class="">
+        <div class="">
+            <span>
+                <h1 class="style-attributes">
+                    <button class="logout-button mr-l-420 mr-style" *ngIf="loginSuccessful"
+                        (click)="onLogoutClicked()">Logout</button>
+
+                    <button class="logout-button mr-style" *ngIf="loginSuccessful"
+                        (click)="onUpdateProfileClicked()">Update
+                        Profile</button>
+                    <button class="logout-button" *ngIf="loginSuccessful" (click)="onUserAccountsNavigated()">User
+                        Account
+                        Details</button>
+                </h1>
+
+
+            </span>
+
+        </div>
+
+    </section>
+
+    <section class="my-dialog login-btn mr-l-550"
+        *ngIf="!isRegisterBtnClicked && !resetPasswordClicked && !loginSuccessful">
+        <div class="mr-b-20 ">
+            <label class="label-attributes mr-r-43"> Email <span class="required-symbol">*</span></label>
+            <input type="text" [(ngModel)]="email" class="textBox-attributes">
+        </div>
+        <div class=" mr-b-20">
+            <label class="label-attributes"> Password <span class="required-symbol">*</span></label>
+            <input type="{{ isPasswordVisible ? 'text' : 'password' }}" [(ngModel)]="password"
+                class="textBox-attributes">
+            <span class="password-toggle-icon" [class.fa-eye]="isPasswordVisible"
+                [class.fa-eye-slash]="!isPasswordVisible" (click)="togglePasswordVisibility()"></span>
+
+        </div>
+        <div class="mr-l-103 mr-b-20">
+            <button class="logout-button" (click)="resetClicked()">Reset Password</button>
+        </div>
+        <div class=" mr-b-20">
+            <button name="login" class="btn-attributes" [disabled]="isLoginDisable()"
+                (click)="onLoginClicked()">Login</button>
+            <button name="register" class="btn-attributes" (click)="onClickRegister()">Register</button>
+        </div>
+    </section>
+
+    <section class="my-dialog login-btn mr-l-550" *ngIf="resetPasswordClicked">
+        <div class=" mr-b-20 ">
+            <label class="label-attributes mr-r-43"> Email</label>
+            <input type="text" [(ngModel)]="email" class="textBox-attributes">
+        </div>
+        <div class=" mr-b-20">
+            <label class="label-attributes"> Password</label>
+            <input type="{{ isResetPasswordVisible ? 'text' : 'password' }}" [(ngModel)]="password"
+                class="textBox-attributes">
+            <span class="password-toggle-icon" [class.fa-eye]="isResetPasswordVisible"
+                [class.fa-eye-slash]="!isResetPasswordVisible" (click)="toggleResetPasswordVisibility()"></span>
+
+        </div>
+        <div class="mr-b-20">
+            <button name="login" class="btn-attributes" [disabled]="isResetDisable()"
+                (click)="resetSubmitted()">Reset</button>
+            <button class="mr-t-20 btn-attributes" (click)="returnBack()">Back</button>
+        </div>
+    </section>
+
+    <section class="my-dialog register-btn" *ngIf="isRegisterBtnClicked || isEditClickedForProfile">
+        <div class="mr-b-20 ">
+            <span class="">
+                <label class="label-attributes mr-r-90"> Name <span class="required-symbol">*</span></label>
+                <input type="text" [(ngModel)]="name" class="textBox-attributes">
+            </span>
+            <span class="mr-l-50 password-input-container">
+                <label class="label-attributes"> Password <span class="required-symbol">*</span></label>
+                <input type="{{ isPasswordVisible ? 'text' : 'password' }}" [(ngModel)]="password"
+                    class="textBox-attributes">
+                <span class="password-toggle-icon" [class.fa-eye]="isPasswordVisible"
+                    [class.fa-eye-slash]="!isPasswordVisible" (click)="togglePasswordVisibility()"></span>
+            </span>
+            <span class="mr-l-50 ">
+                <label class="label-attributes mr-r-43"> Email <span class="required-symbol">*</span></label>
+                <input type="text" [(ngModel)]="email" class="textBox-attributes">
+            </span>
+        </div>
+        <div class="mr-b-20">
+            <span class="">
+                <label class="label-attributes"> Phone Number <span class="required-symbol">*</span></label>
+                <input type="text" (input)="validatePhoneNumber($event)" [(ngModel)]="phoneNo"
+                    class="textBox-attributes">
+            </span>
+            <span class="mr-l-50">
+                <label class="label-attributes"> User Role <span class="required-symbol">*</span></label>
+                <select [(ngModel)]="roleIdSelected" class="dd-attributes">
+
+                    <option *ngFor="let option of rolesMasterData" [value]="option._id">{{ option.roleTitle }}</option>
+                </select>
+            </span>
+        </div>
+
+        <div class="phNo-attributes" *ngIf="!isPhoneNumberValid">Invalid Phone Number</div>
+        <div class="align-center mr-b-20">
+            <button name="submit" *ngIf="isRegisterBtnClicked && !isEditClickedForProfile"
+                [disabled]="!checkIsDisable()" class="btn-attributes" (click)="OnSubmit()">Submit</button>
+            <button name="submit" *ngIf="isEditClickedForProfile && !isRegisterBtnClicked"
+                [disabled]="!checkIsDisable()" class="btn-attributes" (click)="onUpdateClicked()">Update</button>
+            <button name="cancel" class="btn-attributes" *ngIf="!isEditClickedForProfile"
+                (click)="OnCancel()">Cancel</button>
+            <button name="cancel" *ngIf="isEditClickedForProfile" class="btn-attributes"
+                (click)="OnEditCanceled()">Cancel</button>
+
+        </div>
+
+
+    </section>
+
+    <section *ngIf="accountsSectionClicked && !isAccountAddClicked" class="mr-l-20">
+        <div *ngFor="let account of accountsAvaliable" class="inline-style card-att">
+            <div class="mr-r-20">Card Number: {{ account.cardNumber }}</div>
+            <div class="mr-r-20">Card Type: {{ account.cardType }}</div>
+            <span class="mr-r-20"><button type="button" (click)="deleteAccount(account._id)">
+                    <img [src]='deleteIcon' class="icon-attributes" alt="Delete">
+                </button></span>
+        </div>
+        <div class="mr-t-20">
+
+            <button type="submit" [disabled]="accountsAvaliable && accountsAvaliable.length > 0" class="btn-attributes"
+                (click)="onAddNewAccountClicked()">Add New Account</button>
+            <button class="btn-attributes" (click)="reset()">Back</button>
+        </div>
+
+    </section>
+    <section *ngIf="isAccountAddClicked" class="mr-l-20">
+
+        <div class="mr-t-20">
+            <h2>Enter Account details</h2>
+        </div>
+        <div class="mr-t-20">
+            <label>Choose Account Type</label>
+            <select class="select-attributes" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
+                <option value="credit">Credit Card</option>
+                <option value="debit">Debit Card</option>
+            </select>
+        </div>
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-103">Card Number</label>
+            <input type="text" id="cardNumber" (input)="validateCardNumber($event)" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="cardNumber" required>
+        </div>
+
+        <div class="cardNo-attributes" *ngIf="!isCardNumberValid">Invalid Card Number</div>
+
+        <div class="mr-t-20">
+            <label for="expirationDate" class="mr-r-35">Expiration Date(mm/yy)</label>
+            <input type="text" id="expirationDate" (input)="validateExpiryDate($event)" name="expirationDate"
+                class="input-attributes" [(ngModel)]="expireDate" required>
+        </div>
+        <div class="cardNo-attributes" *ngIf="!isDateValid">Invalid Date Format</div>
+        <div class="cardNo-attributes" *ngIf="isDateValid && !isMonthValid">Invalid Month</div>
+        <div class="cardNo-attributes" *ngIf="isDateValid && isMonthValid && !isFutureDate">Expiry Date Must be a Future
+            Date</div>
+
+        <div class="mr-t-20">
+            <label for="cvv" class="mr-r-156">CVV</label>
+            <input type="text" id="cvv" name="cvv" (input)="validateCvv($event)" class="input-attributes"
+                [(ngModel)]="cvv" required>
+        </div>
+        <div class="cardNo-attributes" *ngIf="!isCvvValid">Invalid CVV</div>
+
+        <div class="mr-t-20">
+            <button type="submit" class="btn-attributes" (click)="addAccount()">Ok</button>
+            <button class="mr-t-20 btn-attributes" (click)="resetAddAccount()">Back</button>
+        </div>
+
+    </section>
+
+</section>
