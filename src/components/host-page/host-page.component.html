@@ -118,9 +118,7 @@
   <div class="mr-t-20">
     <label for="name" class="mr-r-10">Title <span class="required-symbol">*</span> :</label>
     <input type="text" id="name" class="mr-r-10 input-attributes" name="name" [(ngModel)]="room.title">
-    <label for="imgUrl" class="mr-r-10">Image URL <span class="required-symbol">*</span> :</label>
-    <input type="text" id="imgUrl" (input)="validateUrl($event)" class="mr-r-10 input-attributes" name="imgUrl"
-      [(ngModel)]="room.imgUrl">
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">
   </div>
 
   <div class="url-attributes" *ngIf="!isUrlValid">Invalid URL</div>

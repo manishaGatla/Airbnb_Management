@@ -11,7 +11,7 @@ export class HostPage implements OnInit {
   constructor(public airbnbService: AirbnbNodeService) { }
   @ViewChild('dialog') dialog: any;
   addBtnClicked: boolean = false;
-
+  deleteIcon = '../../assets/svgs/delete.svg';
   staysAvaliable: any;
   stayDetails: any;
   roomTypes: any;
@@ -122,7 +122,7 @@ export class HostPage implements OnInit {
       "amenitiesId": [
       ],
       "roomTypeId": "",
-      "imgUrl": "",
+      "imgUrl" : null,
       "hostId": "",
       "statusId": "64a5c6863be703681d948b5a",
       "isAvaliable": "No",
@@ -133,6 +133,19 @@ export class HostPage implements OnInit {
     this.amenities?.forEach((amenty: any) => {
       amenty.checked = false
     })
+  }
+
+  onFileSelected(event: any) {
+    const selectedFile : File = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(selectedFile);
+    reader.onload = (res : any)=>{
+     this.room.imgUrl = res.target.result;
+    }
+
+
+    
   }
 
   addAirBnb() {
@@ -184,6 +197,7 @@ export class HostPage implements OnInit {
       if (c.checked)
         this.room.amenitiesId.push(c._id);
     })
+    let url = this.room.url;
     this.room.hostId = this.airbnbService.userId;
     this.airbnbService.addStay(this.room).subscribe((res) => {
       alert("Stay Added successfully and sent for approval to Admin");
