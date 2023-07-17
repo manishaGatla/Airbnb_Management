@@ -121,8 +121,6 @@
     <input type="file" (change)="onFileSelected($event)" accept="image/*">
   </div>
 
-  <div class="url-attributes" *ngIf="!isUrlValid">Invalid URL</div>
-
   <div class="mr-t-20">
     <label for="price" class="mr-r-10">Price <span class="required-symbol">*</span> :</label>
     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" [(ngModel)]="room.price">
