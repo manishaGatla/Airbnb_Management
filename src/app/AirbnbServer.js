@@ -124,18 +124,18 @@ app.get('/api/stays', async (req, res) => {
 })
 
 app.post('/api/stays/search', (req, res) => {
-  const { country, city, minPrice, maxPrice, amenities } = req.body;
+  const { country, city, minPrice, maxPrice, amenitiesId } = req.body;
   const collection = client.db('Airbnb_Management').collection('Airbnb_Listings');
   const query = {};
   if (country != null && country != '') {
-    query['location.country'] = {
+    query['country'] = {
       $regex: '^' + country + '$',
       $options: 'i'
     }
   }
 
   if (city != null && city != '') {
-    query['location.city'] = {
+    query['city'] = {
       $regex: '^' + city + '$',
       $options: 'i'
     }
@@ -150,9 +150,9 @@ app.post('/api/stays/search', (req, res) => {
       query.price.$lte = maxPrice;
     }
   }
-  if (amenities && amenities.length > 0) {
+  if (amenitiesId && amenitiesId.length > 0) {
 
-    query.amenities = { $in: amenities };
+    query.amenitiesId = { $in: amenitiesId };
   }
 
   Listings.find(query)

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, VERSION, ViewChild } from '@angular/core';
 import { AirbnbNodeService } from 'src/app/airbnb-node.service';
 import { FormControl, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'host-page',
@@ -8,7 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./host-page.component.scss']
 })
 export class HostPage implements OnInit {
-  constructor(public airbnbService: AirbnbNodeService) { }
+  constructor(public airbnbService: AirbnbNodeService, private datePipe: DatePipe) { }
   @ViewChild('dialog') dialog: any;
   addBtnClicked: boolean = false;
   deleteIcon = '../../assets/svgs/delete.svg';
@@ -147,7 +148,32 @@ export class HostPage implements OnInit {
 
     
   }
+  validateDates() {
+    let currentDate = this.getCurrentDateFormatted();//new Date().getFullYear() +  '-' +  (new Date().getMonth() + 1)+ '-'  + new Date().getDate();
+    if (this.room.checkIn && this.room.checkOut) {
+      const checkInDate = this.room.checkIn;
+      const checkOutDate = this.room.checkOut;
+  
+      if (checkInDate < currentDate) {
+        alert('Check-in date should be the current date or later.');
+        this.room.checkIn = null; 
+      }
+  
+      if (checkOutDate <= checkInDate) {
+        alert('Check-out date should be after the check-in date.');
+        this.room.checkOut = null; 
+      }
+    }
+  }
 
+  getCurrentDateFormatted(): string {
+    // Get the current date
+    const today = new Date();
+
+    // Format the date to 'yyyy-MM-dd' (or any desired format)
+    return this.datePipe.transform(today, 'yyyy-MM-dd') || '';
+  }
+  
   addAirBnb() {
     this.addBtnClicked = true;
 

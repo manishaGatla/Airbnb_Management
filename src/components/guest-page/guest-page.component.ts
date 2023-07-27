@@ -131,19 +131,21 @@ export class GuestPage implements OnInit {
   searchStays() {
     this.amenities.forEach((amenty: any) => {
       if (amenty.checked)
-        this.selectedAmenities.push(amenty.name)
+        this.selectedAmenities.push(amenty._id)
     })
-    this.searchForm.amenities = this.selectedAmenities;
+    this.searchForm.amenitiesId = this.selectedAmenities;
     this.airbnbNodeService.searchStays(this.searchForm).subscribe((res: any) => {
       this.staysAvaliable = res;
       this.staysAvaliable = this.staysAvaliable.filter((stay: any) => stay.statusId == "64a5c6863be703681d948b5b");
       if (this.staysAvaliable && this.staysAvaliable.length > 0) {
         this.isSearchClicked = true;
+        this.searchForm ={};
 
       }
       else {
         alert("No results for the above search");
         this.isSearchClicked = false;
+        this.resetFields();
       }
     })
   }

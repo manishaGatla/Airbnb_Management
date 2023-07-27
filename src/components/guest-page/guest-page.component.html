@@ -73,47 +73,41 @@
             </div>
             <div class="details-section">
                 <h2>{{ stayDetails.description }}</h2>
-            </div>
-
-        </div>
-        <div class="details-container">
-            <div class="details-section1">
                 <div class="flex-1">
                     <p>Price: {{ stayDetails.price }}</p>
                 </div>
                 <div class="flex-1">
                     <p>Room Type: {{ stayDetails.roomType }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Amenities: {{ stayDetails.amenities.join(', ') }}</p>
                 </div>
-            </div>
-            <div class="details-section1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Street: {{ stayDetails.street }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>City: {{ stayDetails.city }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>State: {{ stayDetails.state }}</p>
                 </div>
                 <div class="flex-1">
                     <p>Country: {{ stayDetails.country }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Check In : {{stayDetails.checkIn | date}}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Check Out : {{stayDetails.checkOut |date}}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Host Name: {{stayDetails.hostName }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
                     <p>Host Contact : {{stayDetails.hostPhone}}</p>
                 </div>
             </div>
+
         </div>
 
         <button *ngIf="!viewStaysClicked" class="mr-t-20" name="bookNow" class="btn-attributes"

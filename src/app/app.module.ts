@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { GuestPage } from 'src/components/guest-page/guest-page.component';
 import { HostPage } from 'src/components/host-page/host-page.component';
 import { AdminPage } from 'src/components/admin-page/admin-page.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { AdminPage } from 'src/components/admin-page/admin-page.component';
   exports: [
     RouterModule
   ],
-  providers: [AirbnbNodeService],
+  providers: [AirbnbNodeService, DatePipe],
   bootstrap: [AirbnbHeader]
 })
 export class AppModule { }

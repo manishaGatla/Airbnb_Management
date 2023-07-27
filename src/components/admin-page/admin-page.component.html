@@ -34,11 +34,6 @@
     </div>
     <div class="details-section">
       <h2>{{ stayDetails.description }}</h2>
-    </div>
-
-  </div>
-  <div class="details-container">
-    <div class="details-section1">
       <div class="flex-1">
         <p>Price: {{ stayDetails.price }}</p>
       </div>
@@ -57,20 +52,8 @@
       <div class="flex-1" *ngIf="stayDetails.guestId">
         <p>Guest Contact : {{stayDetails.guestPhone}}</p>
       </div>
-      <div class="flex-1" *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'">
-        <label for="roomType">Update Status <span class="required-symbol">*</span>:</label>
-        <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="statusId">
-          <option *ngFor="let item of statuses" [value]="item._id">{{ item.name }}</option>
-        </select>
-      </div>
+     
 
-      <div class="flex-1 mr-t-20">
-        <button *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'" class="btn-attributes"
-          (click)="updateStay(stayDetails)">Update</button>
-        <button class="btn-attributes" (click)="resetFields()">Back</button>
-      </div>
-    </div>
-    <div class="details-section1">
       <div class="flex-1">
         <p>Street: {{ stayDetails.street }}</p>
       </div>
@@ -95,7 +78,23 @@
       <div class="flex-1" *ngIf="stayDetails.hostId">
         <p>Host Contact : {{stayDetails.hostPhone}}</p>
       </div>
+
+      <div class="flex-1" *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'">
+        <label for="roomType">Update Status <span class="required-symbol">*</span>:</label>
+        <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="statusId">
+          <option *ngFor="let item of statuses" [value]="item._id">{{ item.name }}</option>
+        </select>
+      </div>
+
     </div>
+
+  </div>
+  <div class="details-container"> 
+      <div class="flex-1 mr-t-20">
+        <button *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'" class="btn-attributes"
+          (click)="updateStay(stayDetails)">Update</button>
+        <button class="btn-attributes" (click)="resetFields()">Back</button>
+      </div>
   </div>
 
 

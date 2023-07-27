@@ -56,11 +56,6 @@
     </div>
     <div class="details-section">
       <h2>{{ stayDetails.description }}</h2>
-    </div>
-
-  </div>
-  <div class="details-container">
-    <div class="details-section1">
       <div class="flex-1">
         <p>Price: {{ stayDetails.price }}</p>
       </div>
@@ -73,8 +68,6 @@
       <div class="flex-1">
         <p>status : {{stayDetails.status }}</p>
       </div>
-    </div>
-    <div class="details-section1">
       <div class="flex-1">
         <p>Street: {{ stayDetails.street }}</p>
       </div>
@@ -100,6 +93,7 @@
         <p *ngIf="stayDetails.guestId">Guest Contact : {{stayDetails.guestPhone}}</p>
       </div>
     </div>
+
   </div>
 
 </section>
@@ -154,9 +148,9 @@
 
   <div class="mr-t-20">
     <label for="checkIn" class="mr-r-10">CheckIn <span class="required-symbol">*</span>:</label>
-    <input type="date" id="checkIn" class="mr-r-10 input-attributes" name="checkIn" [(ngModel)]="room.checkIn">
+    <input type="date" id="checkIn" class="mr-r-10 input-attributes" name="checkIn" (change)="validateDates()" [(ngModel)]="room.checkIn">
     <label for="checkOut" class="mr-r-10">Check Out <span class="required-symbol">*</span>:</label>
-    <input type="date" id="checkOut" class="mr-r-10 input-attributes" name="checkOut" [(ngModel)]="room.checkOut">
+    <input type="date" id="checkOut" class="mr-r-10 input-attributes" name="checkOut" (change)="validateDates()" [(ngModel)]="room.checkOut">
   </div>
 
   <div class="mr-t-20">
