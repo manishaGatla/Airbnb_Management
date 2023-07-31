@@ -76,16 +76,8 @@ export class HostPage implements OnInit {
           this.pendingStays.push(stay);
           stay.status = "Pending";
         }
-        // if(stay.guestId != null){
-        //  this.bookingDoneMsg = this.bookingDoneMsg != null && this.bookingDoneMsg != undefined ?
-        //   this.bookingDoneMsg + ' , ' + + stay.name + ' | ' + stay.description:
-        //   "Payment Successful for the stay(s) :" + stay.name + ' | ' + stay.description;
-        // }
 
       })
-      if (this.bookingDoneMsg != null && this.bookingDoneMsg != undefined) {
-        document.getElementById('dialogOpen')?.click();
-      }
     })
   }
 

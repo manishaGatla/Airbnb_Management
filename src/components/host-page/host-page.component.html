@@ -27,7 +27,7 @@
 
 <section *ngIf="!showDetailsView && !addBtnClicked && cancelledStays.length > 0">
   <h2>Cancelled Stays by Admin</h2>
-  <span *ngFor="let stay of staysAvaliable" class="inline-style">
+  <span *ngFor="let stay of cancelledStays" class="inline-style">
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 

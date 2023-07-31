@@ -141,19 +141,19 @@ export class AirbnbLogin implements OnInit {
             email: this.airbnbServcie.userEmail,
             details: details,
             id: this.airbnbServcie.userId,
-            collectionName: this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
+            collectionName: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
         }
 
         if (this.roleIdSelected != this.originalRoleIdSelected) {
             let deleteReq = {
                 id: this.airbnbServcie.userId,
-                role: this.rolesMasterData.find((p: any) => p._id == this.originalRoleIdSelected).roleTitle + 's'
+                role: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.originalRoleIdSelected).roleTitle + 's'
             }
             this.airbnbServcie.deleteProfile(deleteReq).subscribe((res) => {
                 if (res && res.deletedCount > 0) {
                     let req = {
                         details: details,
-                        collectionName: this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
+                        collectionName: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
                     }
                     this.airbnbServcie.insertNewUser(req).subscribe((res) => {
                         alert("Updated Successfully");
@@ -251,7 +251,7 @@ export class AirbnbLogin implements OnInit {
             email: this.email,
             details: details
         }
-        this.airbnbServcie.updateProfile(req).subscribe((res) => {
+        this.airbnbServcie.updatePassword(req).subscribe((res) => {
             if (res.matchedCount > 0 && res.modifiedCount > 0) {
                 alert("Updated Successfully");
                 this.resetFields();
@@ -276,17 +276,23 @@ export class AirbnbLogin implements OnInit {
     }
 
     onAddNewAccountClicked() {
+        this.cardNumber = null;
+        this.selectedPaymentMethod = null;
+        this.cvv = null;
+        this.expireDate = null;
         this.isAccountAddClicked = this.airbnbServcie.isAccountAddClicked = true;
     }
 
     getAccounts() {
         this.airbnbServcie.getAccountsByUserId(this.airbnbServcie.userId).subscribe((res) => {
             this.accountsAvaliable = res;
+            this.accountsAvaliable.forEach((acc: any) => {
+                acc.modifiedCardNumber  = '************' + acc.cardNumber.substring(12);
+            });
         })
     }
 
     addAccount() {
-        const modifiedCardNumber = '************' + this.cardNumber.substring(12);
         let req = {
             "userId": this.airbnbServcie.userId,
             "balance": "5000",
@@ -294,7 +300,7 @@ export class AirbnbLogin implements OnInit {
             "isHost": this.isHost ? 1 : 0,
             "isAdmin": this.isAdmin ? 1 : 0,
             "cardType": this.selectedPaymentMethod,
-            "cardNumber": modifiedCardNumber
+            "cardNumber": this.cardNumber
         }
         this.airbnbServcie.addAccount(req).subscribe((res) => {
             if (res.insertedId != null) {

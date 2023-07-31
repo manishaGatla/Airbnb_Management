@@ -153,5 +153,10 @@ export class AirbnbNodeService {
     const url = this.baseUrl + '/api/delete/accounts/?id=' + id;
     return this.http.delete(url);
   }
+
+  updatePassword(req: any): Observable<any> {
+    const url = this.baseUrl + '/api/update/resetPassword';
+    return this.http.post(url, req);
+  }
 }
 

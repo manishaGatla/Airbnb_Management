@@ -234,12 +234,11 @@ app.post('/api/addStay', (req, res) => {
 
 
 app.post('/api/update/profile', (req, res) => {
+  console.log(req.body);
   const collection = client.db('Airbnb_Management').collection(req.body.collectionName);
-  const email = req.body.email;
   const userDetails = req.body.details;
-  const filter = { email: email };
+  const filter = { email : req.body.email };
   let update;
-  if (userDetails && userDetails.name != null && userDetails.name != '' && userDetails.name != undefined) {
     update = {
       $set: {
         name: userDetails.name,
@@ -248,18 +247,48 @@ app.post('/api/update/profile', (req, res) => {
         phoneNumber: userDetails.phoneNumber
       }
     };
-  }
-  else {
-    update = {
-      $set: {
-        password: userDetails.password
-      }
-    }
-  }
-
+    console.log(update);
+  
   collection.updateOne(filter, update).then((data) => {
     res.json(data);
   })
+})
+
+app.post('/api/update/resetPassword', (req, res) => {
+  const adminCollection = client.db('Airbnb_Management').collection('Airbnb_Admins');
+  const hostCollection = client.db('Airbnb_Management').collection('Airbnb_Hosts');
+  const guestCollection = client.db('Airbnb_Management').collection('Airbnb_Guests');
+  const email = req.body.email;
+  const password = req.body.details.Password;
+  const filter = { email: email };
+  let update = {
+    $set: {
+      password: password
+    }
+  };
+
+  adminCollection.updateOne(filter, update).then((data) => {
+    console.log(data.modifiedCount);
+    if(data.modifiedCount > 0){
+      res.json(data);
+    }
+    else{
+      hostCollection.updateOne(filter, update).then((dataHost) => {
+        console.log(dataHost.modifiedCount);
+        if(dataHost.modifiedCount > 0){
+          res.json(dataHost);
+        }
+        else{
+          guestCollection.updateOne(filter, update).then((dataGuest) => {
+            console.log(dataGuest.modifiedCount);
+            res.json(dataGuest);
+          })
+        }
+      })
+      
+    }
+  })
+  
 })
 
 app.delete('/api/delete/airbnb', (req, res) => {
