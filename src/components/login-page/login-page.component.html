@@ -117,7 +117,7 @@
 
     <section *ngIf="accountsSectionClicked && !isAccountAddClicked" class="mr-l-20">
         <div *ngFor="let account of accountsAvaliable" class="inline-style card-att">
-            <div class="mr-r-20">Card Number: {{ account.cardNumber }}</div>
+            <div class="mr-r-20">Card Number: {{ account.modifiedCardNumber }}</div>
             <div class="mr-r-20">Card Type: {{ account.cardType }}</div>
             <div class="mr-r-20">Balance: {{ account.balance }}</div>
             <span class="mr-r-20"><button type="button" (click)="deleteAccount(account._id)">
