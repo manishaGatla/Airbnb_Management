@@ -1,6 +1,7 @@
 <section *ngIf="!showDetailsView && !addBtnClicked && pendingStays.length > 0">
   <h2>Pending stays for Approval</h2>
   <span *ngFor="let stay of pendingStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 
@@ -10,6 +11,7 @@
 <section *ngIf="!showDetailsView && !addBtnClicked && approvedStays.length >0">
   <h2>Approved stays </h2>
   <span *ngFor="let stay of approvedStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 
@@ -19,6 +21,7 @@
 <section *ngIf="!showDetailsView && !addBtnClicked && reservedStays.length > 0">
   <h2>Reserved stays</h2>
   <span *ngFor="let stay of reservedStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 
@@ -28,6 +31,7 @@
 <section *ngIf="!showDetailsView && !addBtnClicked && cancelledStays.length > 0">
   <h2>Cancelled Stays by Admin</h2>
   <span *ngFor="let stay of cancelledStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 
@@ -100,7 +104,7 @@
 
 <section>
   <button name="addNewAirbnb"
-    *ngIf="!addBtnClicked && showDetailsView &&  stayDetails && stayDetails.statusId == '64a5c6863be703681d948b5a'"
+    *ngIf="!addBtnClicked && showDetailsView &&  stayDetails && stayDetails.statusId == pendingStatusId"
     (click)="deleteAirbnb(stayDetails._id)" class="mr-t-20 btn-attributes">Delete Your Home </button>
   <button name="addNewAirbnb" *ngIf="!addBtnClicked" (click)="addAirBnb()" class="mr-t-20 btn-attributes">Airbnb Your
     Home </button>
@@ -122,6 +126,8 @@
     <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="room.roomTypeId">
       <option *ngFor="let item of roomTypes" [value]="item._id">{{ item.name }}</option>
     </select>
+    <label for="price" *ngIf = "room.roomTypeId == sharedRoomTypeId" class="mr-r-10">No of Guests <span class="required-symbol">*</span> :</label>
+    <input type="number" id="price" *ngIf = "room.roomTypeId == sharedRoomTypeId" class="mr-r-10 input-attributes" name="price" [(ngModel)]="room.NoOfGuests">
   </div>
 
 

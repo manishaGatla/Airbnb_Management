@@ -195,10 +195,12 @@ app.post('/api/update/Status', async (req, res) => {
   let updateQuery;
   if (req.body.statusId != null) {
     const status = req.body.statusId;
-    updateQuery = { $set: { statusId: status, isAvaliable: status == "64a5c6863be703681d948b5b" } };
+    updateQuery = { $set: { statusId: status } };
   }
   else if (req.body.stayDetails != null) {
-    updateQuery = { $set: { statusId: req.body.stayDetails.statusId, isAvaliable: req.body.stayDetails.statusId == "64a5c6863be703681d948b5b", paymentId: req.body.stayDetails.paymentId, guestId: req.body.stayDetails.guestId } };
+    updateQuery = { $set: { statusId: req.body.stayDetails.statusId, 
+    paymentId: req.body.stayDetails.paymentId, NoOfGuestsBooked : req.body.stayDetails.NoOfGuestsBooked,
+    guestId: req.body.stayDetails.guestId } };
   }
 
   const filter = { _id: new ObjectId(stay) };

@@ -21,6 +21,10 @@ export class AdminPage implements OnInit {
   pendingStays: any = [];
   allGuests: any;
   allHosts: any;
+  pendingStatusId: any;
+  completedStatusId: any;
+  approvedStatusId: any;
+  cancelledStatusId: any;
   constructor(private airbnbNodeService: AirbnbNodeService) { }
 
 
@@ -50,6 +54,10 @@ export class AdminPage implements OnInit {
     this.airbnbNodeService.getStatusMasterData().subscribe((res) => {
       this.statuses = res;
       this.allStatuses = res;
+      this.pendingStatusId = this.statuses.find((c: any) => c.name == "Pending")._id;
+      this.completedStatusId = this.statuses.find((c: any) => c.name == "Completed")._id;
+      this.cancelledStatusId = this.statuses.find((c: any) => c.name == "Cancelled")._id;
+      this.approvedStatusId = this.statuses.find((c: any) => c.name == "Approved")._id;
       this.statuses = this.statuses.filter((c: any) => c.name != "Pending" && c.name != "Completed")
     })
   }
@@ -78,19 +86,19 @@ export class AdminPage implements OnInit {
     this.airbnbNodeService.getAllStays().subscribe((res) => {
       this.allStays = res;
       this.allStays.forEach((stay: any) => {
-        if (stay.statusId == "64a5c6863be703681d948b5c") {
+        if (stay.statusId == this.cancelledStatusId) {
           this.cancelledStays.push(stay);
           stay.status = "Cancelled";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5b") {
+        else if (stay.statusId == this.approvedStatusId) {
           this.approvedStays.push(stay);
           stay.status = "Approved";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5d") {
+        else if (stay.statusId == this.completedStatusId) {
           this.reservedStays.push(stay);
           stay.status = "Completed";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5a") {
+        else if (stay.statusId == this.pendingStatusId) {
           this.pendingStays.push(stay);
           stay.status = "Pending";
         }
@@ -108,9 +116,14 @@ export class AdminPage implements OnInit {
         this.stayDetails.hostName = this.allHosts.find((host: any) => host._id == this.stayDetails.hostId).name;
         this.stayDetails.hostPhone = this.allHosts.find((host: any) => host._id == this.stayDetails.hostId).phoneNumber;
       }
-      if (this.stayDetails.guestId) {
-        this.stayDetails.guestName = this.allGuests.find((guest: any) => guest._id == this.stayDetails.guestId).name;
-        this.stayDetails.guestPhone = this.allGuests.find((guest: any) => guest._id == this.stayDetails.guestId).phoneNumber;
+      if (this.stayDetails.guestId && this.stayDetails.guestId.length  > 0) {
+        const distinctGuests = this.stayDetails.guestId.filter(
+          (guest : any, i : any, arr : any) => arr.findIndex((t: any) => t === guest) === i
+        );
+        distinctGuests.forEach((guestBooked : any) =>{
+          this.stayDetails.guestName = this.stayDetails.guestName == null ?  this.allGuests.find((guest: any) => guest._id == guestBooked).name: this.stayDetails.guestName + ', ' +this.allGuests.find((guest: any) => guest._id == guestBooked).name ;
+          this.stayDetails.guestPhone = this.stayDetails.guestPhone == null ? this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber : this.stayDetails.guestPhone + ', ' +this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber ;;
+        })
       }
       this.stayDetails.status = this.allStatuses.find((v: any) => v._id == this.stayDetails.statusId).name;
       this.stayDetails.roomType = this.roomTypes.find((v: any) => v._id == res[0].roomTypeId).name;

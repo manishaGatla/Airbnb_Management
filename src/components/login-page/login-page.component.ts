@@ -74,7 +74,7 @@ export class AirbnbLogin implements OnInit {
     getRoles() {
         this.airbnbServcie.getRolesMasterData().subscribe((res) => {
             this.allRoles = res;
-            this.rolesMasterData = res;
+            this.rolesMasterData = res.filter((role: any) => role.roleTitle != 'Admin');
         })
     }
 
@@ -85,7 +85,7 @@ export class AirbnbLogin implements OnInit {
             email: this.email,
             phoneNumber: this.phoneNo
         }
-        let collectionName = this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's';
+        let collectionName = this.allRoles.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's';
         let req = {
             details: details,
             collectionName: collectionName
@@ -141,19 +141,19 @@ export class AirbnbLogin implements OnInit {
             email: this.airbnbServcie.userEmail,
             details: details,
             id: this.airbnbServcie.userId,
-            collectionName: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
+            collectionName: 'Airbnb_' + this.allRoles.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
         }
 
         if (this.roleIdSelected != this.originalRoleIdSelected) {
             let deleteReq = {
                 id: this.airbnbServcie.userId,
-                role: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.originalRoleIdSelected).roleTitle + 's'
+                role: 'Airbnb_' + this.allRoles.find((p: any) => p._id == this.originalRoleIdSelected).roleTitle + 's'
             }
             this.airbnbServcie.deleteProfile(deleteReq).subscribe((res) => {
                 if (res && res.deletedCount > 0) {
                     let req = {
                         details: details,
-                        collectionName: 'Airbnb_' + this.rolesMasterData.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
+                        collectionName: 'Airbnb_' + this.allRoles.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
                     }
                     this.airbnbServcie.insertNewUser(req).subscribe((res) => {
                         alert("Updated Successfully");

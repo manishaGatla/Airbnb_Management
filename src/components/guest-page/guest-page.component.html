@@ -48,6 +48,7 @@
 
     <section *ngIf="viewStaysClicked && staysReserved && !showDetailsView && staysReserved.length > 0 ">
         <span *ngFor="let stay of staysReserved" class="inline-style">
+            <p class="p-title">{{stay.title}}</p>
             <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
         </span>
         <div>
@@ -58,6 +59,7 @@
 
     <section *ngIf="isSearchClicked && !showDetailsView" class="mr-l-20">
         <span *ngFor="let stay of staysAvaliable" class="inline-style">
+            <p class="p-title">{{stay.title}}</p>
             <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
         </span>
         <div>
@@ -79,10 +81,10 @@
                 <div class="flex-1">
                     <p>Room Type: {{ stayDetails.roomType }}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Amenities: {{ stayDetails.amenities.join(', ') }}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Street: {{ stayDetails.street }}</p>
                 </div>
                 <div class="flex-1">
@@ -94,18 +96,24 @@
                 <div class="flex-1">
                     <p>Country: {{ stayDetails.country }}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Check In : {{stayDetails.checkIn | date}}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Check Out : {{stayDetails.checkOut |date}}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Name: {{stayDetails.hostName }}</p>
                 </div>
-                <div class="flex-1" *ngIf="stayDetails.guestId == airbnbNodeService.userId">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Contact : {{stayDetails.hostPhone}}</p>
                 </div>
+                <div class="flex-1" *ngIf = "stayDetails.roomType == 'Private room' && !viewStaysClicked">
+                    <label for="price"  class="mr-r-10">No of Guests For Booking<span class="required-symbol">*</span> :</label>
+                    <input type="number" id="price" class="mr-r-10 input-attributes" name="price" (change)="checkNoofGuestsValidation()" [(ngModel)]="NoofGuests">
+                </div>
+                <div class="cardNo-attributes" *ngIf="checkNoofGuestsValidation()">No of Guests exceeded then the mentioned no of guests by host. The max no of guests allowed are 
+                    {{this.stayDetails.NoOfGuests - this.stayDetails.NoOfGuestsBooked}}</div>
             </div>
 
         </div>

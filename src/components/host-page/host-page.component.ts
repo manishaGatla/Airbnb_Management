@@ -28,14 +28,18 @@ export class HostPage implements OnInit {
   pendingStays: any = [];
   statuses: any;
   allGuests: any;
+  sharedRoomTypeId: any;
+  pendingStatusId: any;
+  completedStatusId: any;
+  approvedStatusId: any;
+  cancelledStatusId: any;
 
   ngOnInit(): void {
-    this.getStays();
-    this.resetRoom();
+    this.getStatuses();
     this.getAmenties();
     this.getRoomTypes();
-    this.getStatuses();
     this.getGuests();
+    this.getStays();
   }
 
   getGuests() {
@@ -48,6 +52,12 @@ export class HostPage implements OnInit {
   getStatuses() {
     this.airbnbService.getStatusMasterData().subscribe((res) => {
       this.statuses = res;
+      res.forEach((c: any)=>{
+        if(c.name == "Pending") this.pendingStatusId = c._id;
+        if(c.name == "Completed") this.completedStatusId = c._id;
+        if(c.name == "Cancelled") this.cancelledStatusId = c._id;
+        if(c.name == "Approved") this.approvedStatusId = c._id;
+      })
     })
   }
 
@@ -60,19 +70,19 @@ export class HostPage implements OnInit {
       this.staysAvaliable = res;
 
       this.staysAvaliable.forEach((stay: any) => {
-        if (stay.statusId == "64a5c6863be703681d948b5c") {
+        if (stay.statusId == this.cancelledStatusId) {
           this.cancelledStays.push(stay);
           stay.status = "Cancelled";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5b") {
+        else if (stay.statusId == this.approvedStatusId) {
           this.approvedStays.push(stay);
           stay.status = "Approved";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5d") {
+        else if (stay.statusId == this.completedStatusId) {
           this.reservedStays.push(stay);
           stay.status = "Completed";
         }
-        else if (stay.statusId == "64a5c6863be703681d948b5a") {
+        else if (stay.statusId == this.pendingStatusId) {
           this.pendingStays.push(stay);
           stay.status = "Pending";
         }
@@ -94,6 +104,7 @@ export class HostPage implements OnInit {
   getRoomTypes() {
     this.airbnbService.getRoomTypes().subscribe((res) => {
       this.roomTypes = res;
+      this.sharedRoomTypeId = this.roomTypes.find((room : any) => room.name == 'Shared room')._id;
     })
   }
 
@@ -117,11 +128,12 @@ export class HostPage implements OnInit {
       "roomTypeId": "",
       "imgUrl" : null,
       "hostId": "",
-      "statusId": "64a5c6863be703681d948b5a",
-      "isAvaliable": "No",
+      "statusId": this.pendingStatusId,
       "checkIn": null,
       "checkOut": null,
-      "paymentId": ""
+      "paymentId": "",
+      "NoOfGuests" : null,
+      "NoOfGuestsBooked" : 0
     };
     this.amenities?.forEach((amenty: any) => {
       amenty.checked = false
@@ -167,6 +179,7 @@ export class HostPage implements OnInit {
   }
   
   addAirBnb() {
+    this.resetRoom();
     this.addBtnClicked = true;
 
   }
@@ -175,7 +188,7 @@ export class HostPage implements OnInit {
     return this.room.title != "" && this.room.description != "" && this.room.price != 0 && this.room.price > 0 &&
       this.room.street != "" &&
       this.room.state != "" && this.room.city != "" && this.room.country != "" &&
-      this.room.roomTypeId != "" && this.room.imgUrl != "";
+      (this.room.roomTypeId != "" && (this.room.roomTypeId !== this.sharedRoomTypeId || (this.room.roomTypeId == this.sharedRoomTypeId && this.room.NoOfGuests != null && this.room.NoOfGuests != 0))) && this.room.imgUrl != "";
   }
 
   navigateToDetails(id: any) {
@@ -184,9 +197,16 @@ export class HostPage implements OnInit {
       this.stayDetails.amenities = [];
       this.stayDetails.roomType = this.roomTypes.find((v: any) => v._id == res[0].roomTypeId).name;
       this.stayDetails.status = this.statuses.find((v: any) => v._id == this.stayDetails.statusId).name;
-      if (this.stayDetails.guestId) {
-        this.stayDetails.guestName = this.allGuests.find((guest: any) => guest._id == this.stayDetails.guestId).name;
-        this.stayDetails.guestPhone = this.allGuests.find((guest: any) => guest._id == this.stayDetails.guestId).phoneNumber;
+      
+      if (this.stayDetails.guestId && this.stayDetails.guestId.length  > 0) {
+        const distinctGuests = this.stayDetails.guestId.filter(
+          (guest : any, i : any, arr : any) => arr.findIndex((t: any) => t === guest) === i
+        );
+        distinctGuests.forEach((guestBooked : any) =>{
+          this.stayDetails.guestName = this.stayDetails.guestName == null ?  this.allGuests.find((guest: any) => guest._id == guestBooked).name: this.stayDetails.guestName + ', ' +this.allGuests.find((guest: any) => guest._id == guestBooked).name ;
+          this.stayDetails.guestPhone = this.stayDetails.guestPhone == null ? this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber : this.stayDetails.guestPhone + ', ' +this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber ;;
+        })
+        
       }
       this.stayDetails.amenitiesId.forEach((id: any) => {
         let amenty = this.amenities.find((id2: any) => id2._id == id).name;

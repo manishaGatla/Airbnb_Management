@@ -40,6 +40,11 @@ export class GuestPage implements OnInit {
   allHosts: any;
   staysReserved: any;
   viewStaysClicked: boolean = false;
+  NoofGuests: any = null;
+  pendingStatusId: any;
+  completedStatusId: any;
+  approvedStatusId: any;
+  cancelledStatusId: any;
 
   constructor(public airbnbNodeService: AirbnbNodeService) { }
 
@@ -62,6 +67,10 @@ export class GuestPage implements OnInit {
   getStatuses() {
     this.airbnbNodeService.getStatusMasterData().subscribe((res) => {
       this.statuses = res;
+      this.pendingStatusId = this.statuses.find((c: any) => c.name == "Pending")._id;
+      this.completedStatusId = this.statuses.find((c: any) => c.name == "Completed")._id;
+      this.cancelledStatusId = this.statuses.find((c: any) => c.name == "Cancelled")._id;
+      this.approvedStatusId = this.statuses.find((c: any) => c.name =="Approved")._id;
     })
   }
 
@@ -136,7 +145,7 @@ export class GuestPage implements OnInit {
     this.searchForm.amenitiesId = this.selectedAmenities;
     this.airbnbNodeService.searchStays(this.searchForm).subscribe((res: any) => {
       this.staysAvaliable = res;
-      this.staysAvaliable = this.staysAvaliable.filter((stay: any) => stay.statusId == "64a5c6863be703681d948b5b");
+      this.staysAvaliable = this.staysAvaliable.filter((stay: any) => stay.statusId == this.approvedStatusId || (stay.statusId == this.completedStatusId && stay.NoOfGuests && stay.NoOfGuests != stay.NoOfGuestsBooked));
       if (this.staysAvaliable && this.staysAvaliable.length > 0) {
         this.isSearchClicked = true;
         this.searchForm ={};
@@ -187,12 +196,12 @@ export class GuestPage implements OnInit {
     const modifiedCardNumber = '************' + this.cardNumber.substring(12);
     let accountDetails = {
       "userId": this.airbnbNodeService.userId,
-      "balance": Number(Number("5000") - Number(this.stayDetails.price)),
+      "balance": this.NoofGuests != null ? Number(Number("5000") - Number(Number(this.stayDetails.price)* Number(this.NoofGuests)))  :Number(Number("5000") - Number(this.stayDetails.price)),
       "isGuest": 1,
       "isHost": 0,
       "isAdmin": 0,
       "cardType": this.selectedPaymentMethod,
-      "cardNumber": modifiedCardNumber
+      "cardNumber": this.cardNumber
     }
     if (this.accountsAvaliable && this.accountsAvaliable.length > 0) {
       this.airbnbNodeService.deleteAccount(this.accountsAvaliable[0]._id).subscribe((results) => {
@@ -219,7 +228,7 @@ export class GuestPage implements OnInit {
   paymentCompletionProcess() {
     let paymentReq = {
       paymentMethod: this.isAddNewAccountClicked ? this.selectedPaymentMethod : this.cardSelected.cardType,
-      amount: this.stayDetails.price,
+      amount:this.NoofGuests ?  Number(this.stayDetails.price * this.NoofGuests) : this.stayDetails.price,
       email: this.airbnbNodeService.userId,
       status: "Succeed",
       cardNumber: this.isAddNewAccountClicked ? '************' + this.cardNumber.substring(12) : this.cardSelected.cardNumber
@@ -259,19 +268,16 @@ export class GuestPage implements OnInit {
   updateAccounts() {
     let adminAcc = this.allAccounts.filter((c: any) => c.isAdmin == 1)[0];
     let hostAcc = this.allAccounts.filter((c: any) => c.userId == this.stayDetails.hostId)[0];
-    let guestAcc = this.allAccounts.filter((c: any) => c._id == this.cardSelected);
+    let guestAcc = this.allAccounts.filter((c: any) => c._id == this.cardSelected)[0];
     let AdminAccUpd = {
       id: adminAcc._id,
-      balance: Number(adminAcc.balance) + Number(Number(this.stayDetails.price) * 0.05)
+      balance: this.NoofGuests != null ? Number(adminAcc.balance) + Number(Number(this.stayDetails.price * 0.05)* Number(this.NoofGuests)) : Number(adminAcc.balance) + Number(Number(this.stayDetails.price) * 0.05)
     }
     let hostAccUpd = {
       id: hostAcc._id,
-      balance: Number(hostAcc.balance) + Number(Number(this.stayDetails.price) * 0.95)
+      balance: this.NoofGuests != null ? Number(hostAcc.balance) + Number(Number(this.stayDetails.price * 0.05)* Number(this.NoofGuests))  :Number(hostAcc.balance) + Number(Number(this.stayDetails.price) * 0.95)
     }
-    let guestAccUpd = {
-      id: guestAcc._id,
-      balance: Number(hostAcc.balance) - Number(this.stayDetails.price)
-    }
+   
     if (this.isAddNewAccountClicked) {
       forkJoin([this.airbnbNodeService.updateAccountDetails(AdminAccUpd), this.airbnbNodeService.updateAccountDetails(hostAccUpd)]).subscribe((response: any) => {
         if (response.length > 0) {
@@ -281,6 +287,10 @@ export class GuestPage implements OnInit {
       })
     }
     else {
+      let guestAccUpd = {
+        id: guestAcc._id,
+        balance: this.NoofGuests != null ?  Number(guestAcc.balance) - Number(Number(this.stayDetails.price) * Number(this.NoofGuests)) : Number(guestAcc.balance) - Number(this.stayDetails.price)
+      }
       forkJoin([this.airbnbNodeService.updateAccountDetails(AdminAccUpd), this.airbnbNodeService.updateAccountDetails(guestAccUpd), this.airbnbNodeService.updateAccountDetails(hostAccUpd)]).subscribe((response: any) => {
         if (response.length > 0) {
           alert("Booking successful");
@@ -291,16 +301,30 @@ export class GuestPage implements OnInit {
 
   }
 
+  checkUserAGuest(){
+    if(this.stayDetails.guestId != null && this.stayDetails.guestId != undefined && this.stayDetails.guestId.length > 0){
+      return this.stayDetails.guestId.find((guest: any) => this.airbnbNodeService.userId == guest);
+    }
+    
+    return false;
+    
+  }
+
+  checkNoofGuestsValidation(){
+   return  Number(this.NoofGuests) > Number(this.stayDetails.NoOfGuests - this.stayDetails.NoOfGuestsBooked);
+  }
+
   updateStayDetails(paymentId: any) {
     let stayDetails = {
-      statusId: "64a5c6863be703681d948b5d", paymentId: paymentId, guestId: this.airbnbNodeService.userId, isAvaliable: "Yes"
+      statusId:  this.completedStatusId
+      ,NoOfGuestsBooked :this.stayDetails.NoOfGuestsBooked + this.NoofGuests, paymentId: paymentId, 
+      guestId: this.stayDetails.guestId !== null && this.stayDetails.guestId !== undefined && this.stayDetails.guestId.length > 0 ?  this.stayDetails.guestId.push(this.airbnbNodeService.userId) : [this.airbnbNodeService.userId], 
     }
     this.airbnbNodeService.updateStayStatus({
       id: this.stayDetails._id,
       stayDetails: stayDetails
     }).subscribe((res) => {
       this.updateAccounts();
-
     })
   }
 
@@ -320,6 +344,7 @@ export class GuestPage implements OnInit {
     this.cardSelected = null;
     this.cvv = null;
     this.selectedPaymentMethod = null;
+    this.NoofGuests = null;
     this.amenities.forEach((x: any) => {
       x.checked = false
 

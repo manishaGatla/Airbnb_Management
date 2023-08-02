@@ -1,6 +1,7 @@
 <section *ngIf="!showDetailsView && pendingStays.length > 0">
   <h2>Pending stays for Approval</h2>
   <span *ngFor="let stay of pendingStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 </section>
@@ -8,6 +9,7 @@
 <section *ngIf="!showDetailsView && approvedStays.length > 0">
   <h2>Approved Stays</h2>
   <span *ngFor="let stay of approvedStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 </section>
@@ -15,6 +17,7 @@
 <section *ngIf="!showDetailsView && cancelledStays.length > 0">
   <h2>Cancelled Stays</h2>
   <span *ngFor="let stay of cancelledStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 </section>
@@ -22,6 +25,7 @@
 <section *ngIf="!showDetailsView && reservedStays.length > 0">
   <h2>Reserved Stays</h2>
   <span *ngFor="let stay of reservedStays" class="inline-style">
+    <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 </section>
@@ -79,7 +83,7 @@
         <p>Host Contact : {{stayDetails.hostPhone}}</p>
       </div>
 
-      <div class="flex-1" *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'">
+      <div class="flex-1" *ngIf="stayDetails.statusId == pendingStatusId">
         <label for="roomType">Update Status <span class="required-symbol">*</span>:</label>
         <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="statusId">
           <option *ngFor="let item of statuses" [value]="item._id">{{ item.name }}</option>
@@ -91,7 +95,7 @@
   </div>
   <div class="details-container"> 
       <div class="flex-1 mr-t-20">
-        <button *ngIf="stayDetails.statusId =='64a5c6863be703681d948b5a'" class="btn-attributes"
+        <button *ngIf="stayDetails.statusId == pendingStatusId" class="btn-attributes"
           (click)="updateStay(stayDetails)">Update</button>
         <button class="btn-attributes" (click)="resetFields()">Back</button>
       </div>
