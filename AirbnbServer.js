@@ -51,6 +51,7 @@ const Amenities = mongoose.model('Airbnb_Amenities', roleSchema, 'Airbnb_Ameniti
 const Listings = mongoose.model('Airbnb_Listings', roleSchema, 'Airbnb_Listings');
 const RoomTypes = mongoose.model('Airbnb_RoomTypes', roleSchema, 'Airbnb_RoomTypes');
 const Accounts = mongoose.model('Airbnb_Accounts', roleSchema, 'Airbnb_Accounts');
+const Bookings = mongoose.model('Airbnb_Booking', roleSchema, 'Airbnb_Booking');
 
 // API endpoint to fetch data from MongoDB
 app.get('/api/roles', (req, res) => {
@@ -66,6 +67,29 @@ app.get('/api/roles', (req, res) => {
 
 app.get('/api/statuses', (req, res) => {
   Statuses.find()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching data from MongoDB:', error);
+      res.status(500).json({ error: 'Error fetching data from MongoDB' });
+    });
+});
+
+app.post('/api/amentyAdd', (req, res) =>{
+  const collection = client.db('Airbnb_Management').collection('Airbnb_Amenities');
+  collection.insertOne(req.body.details)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      console.error('Error adding data from MongoDB:', error);
+      res.status(500).json({ error: 'Error adding data from MongoDB' });
+    });
+})
+
+app.get('/api/bookings', (req, res) => {
+  Bookings.find()
     .then((data) => {
       res.json(data);
     })
@@ -124,7 +148,7 @@ app.get('/api/stays', async (req, res) => {
 })
 
 app.post('/api/stays/search', (req, res) => {
-  const { country, city, minPrice, maxPrice, amenitiesId, checkIn , checkOut } = req.body;
+  const { country, city, minPrice, maxPrice, amenitiesId } = req.body;
   const collection = client.db('Airbnb_Management').collection('Airbnb_Listings');
   const query = {};
   if (country != null && country != '') {
@@ -132,14 +156,6 @@ app.post('/api/stays/search', (req, res) => {
       $regex: '^' + country + '$',
       $options: 'i'
     }
-  }
-
-  if (checkIn != null && checkOut != '' 
-  && checkOut != null && checkIn != undefined && 
-  checkOut != undefined && checkIn!= '') 
-  {
-    query['checkIn'] = { $lte: checkIn };
-    query['checkOut'] = { $gte: checkOut };
   }
 
 
@@ -202,9 +218,8 @@ app.post('/api/update/Status', async (req, res) => {
   const collection = client.db('Airbnb_Management').collection('Airbnb_Listings');
   const stay = req.body.id;
   let updateQuery;
-  if (req.body.statusId != null) {
-    const status = req.body.statusId;
-    updateQuery = { $set: { statusId: status } };
+  if (req.body.isAvaliable != null) {
+    updateQuery = { $set: { isAvaliable: req.body.isAvaliable } };
   }
   else if (req.body.stayDetails != null) {
     updateQuery = { $set: { statusId: req.body.stayDetails.statusId, 

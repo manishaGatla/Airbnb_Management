@@ -158,5 +158,15 @@ export class AirbnbNodeService {
     const url = this.baseUrl + '/api/update/resetPassword';
     return this.http.post(url, req);
   }
+
+  getBookings(): Observable<any> {
+    const url = this.baseUrl + '/api/bookings';
+    return this.http.get(url);
+  }
+
+  addAmenity(req: any): Observable<any> {
+    const url = this.baseUrl + '/api/amentyAdd';
+    return this.http.post(url, req);
+  }
 }
 

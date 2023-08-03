@@ -16,12 +16,14 @@ export class AirbnbLogin implements OnInit {
     cardNumber: any;
     isDateValid: boolean = true;
     isFutureDate: boolean = true;
-    cvv: any;
+    cardName: any;
     isMonthValid: boolean = true;
     isCvvValid: boolean = true;
     expireDate: any;
     selectedPaymentMethod: any;
-    accountsAvaliable: any;
+    reEnteraccountNumber: any;
+    routingNumber: any;
+    accountNumber: any;
     isAccountAddClicked: boolean = false;
     email: any;
     isRegisterBtnClicked: boolean = false;
@@ -42,10 +44,13 @@ export class AirbnbLogin implements OnInit {
     isPhoneNumberValid: boolean = true;
     accountsSectionClicked: boolean = false;
     originalRoleIdSelected: any;
+    showAccNumError: boolean = false;
+    accountsAvaliable: any;
 
 
     ngOnInit(): void {
         this.getRoles();
+        this.showAccNumError = false;
     }
 
     checkIsDisable() {
@@ -71,6 +76,15 @@ export class AirbnbLogin implements OnInit {
 
     }
 
+    validateAccountNumber(){
+        if(Number(this.reEnteraccountNumber) != Number(this.accountNumber)){
+            this.showAccNumError = true;
+        }
+        else{
+            this.showAccNumError = false;
+        }
+    }
+
     getRoles() {
         this.airbnbServcie.getRolesMasterData().subscribe((res) => {
             this.allRoles = res;
@@ -92,7 +106,6 @@ export class AirbnbLogin implements OnInit {
         }
         this.airbnbServcie.insertNewUser(req).subscribe((res) => {
             if (res && res.acknowledged == true) {
-                alert("User Added Successfully");
                 this.resetFields();
                 this.isRegisterBtnClicked = false;
             }
@@ -124,9 +137,11 @@ export class AirbnbLogin implements OnInit {
         this.isEditClickedForProfile = this.airbnbServcie.isEditClickedForProfile = false;
         this.isAccountAddClicked = this.airbnbServcie.isAccountAddClicked = false;
         this.accountsSectionClicked = this.airbnbServcie.accountsSectionClicked = false;
-        this.cardNumber = null;
+        this.cardName = null;
         this.selectedPaymentMethod = null;
-        this.cvv = null;
+        this.accountNumber= null;
+        this.reEnteraccountNumber = null;
+        this.routingNumber = null;
         this.expireDate = null;
     }
 
@@ -276,10 +291,10 @@ export class AirbnbLogin implements OnInit {
     }
 
     onAddNewAccountClicked() {
-        this.cardNumber = null;
+        this.accountNumber = null;
         this.selectedPaymentMethod = null;
-        this.cvv = null;
-        this.expireDate = null;
+        this.cardName = null;
+        this.reEnteraccountNumber = null;
         this.isAccountAddClicked = this.airbnbServcie.isAccountAddClicked = true;
     }
 
@@ -287,7 +302,7 @@ export class AirbnbLogin implements OnInit {
         this.airbnbServcie.getAccountsByUserId(this.airbnbServcie.userId).subscribe((res) => {
             this.accountsAvaliable = res;
             this.accountsAvaliable.forEach((acc: any) => {
-                acc.modifiedCardNumber  = '************' + acc.cardNumber.substring(12);
+                acc.modifiedAccNumber  = '************' + acc.accountNumber.substring(13);
             });
         })
     }
@@ -299,8 +314,9 @@ export class AirbnbLogin implements OnInit {
             "isGuest": this.isGuest ? 1 : 0,
             "isHost": this.isHost ? 1 : 0,
             "isAdmin": this.isAdmin ? 1 : 0,
-            "cardType": this.selectedPaymentMethod,
-            "cardNumber": this.cardNumber
+            "accountType": this.selectedPaymentMethod,
+            "accountNumber": this.accountNumber,
+            "routingNumber": this.routingNumber
         }
         this.airbnbServcie.addAccount(req).subscribe((res) => {
             if (res.insertedId != null) {

@@ -117,8 +117,8 @@
 
     <section *ngIf="accountsSectionClicked && !isAccountAddClicked" class="mr-l-20">
         <div *ngFor="let account of accountsAvaliable" class="inline-style card-att">
-            <div class="mr-r-20">Card Number: {{ account.modifiedCardNumber }}</div>
-            <div class="mr-r-20">Card Type: {{ account.cardType }}</div>
+            <div class="mr-r-20">Account Number: {{ account.modifiedAccNumber }}</div>
+            <div class="mr-r-20">Account Type: {{ account.cardType }}</div>
             <div class="mr-r-20">Balance: {{ account.balance }}</div>
             <span class="mr-r-20"><button type="button" (click)="deleteAccount(account._id)">
                     <img [src]='deleteIcon' class="icon-attributes" alt="Delete">
@@ -140,34 +140,33 @@
         <div class="mr-t-20">
             <label>Choose Account Type</label>
             <select class="select-attributes" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
-                <option value="credit">Credit Card</option>
-                <option value="debit">Debit Card</option>
+                <option value="saving account">Saving Account</option>
+                <option value="checking account">Checking Account</option>
             </select>
         </div>
         <div class="mr-t-20">
-            <label for="cardNumber" class="mr-r-103">Card Number</label>
-            <input type="text" id="cardNumber" (input)="validateCardNumber($event)" class="wd-300 input-attributes"
-                name="cardNumber" [(ngModel)]="cardNumber" required>
+            <label for="cardNumber" class="mr-r-145">Name On Account</label>
+            <input type="text" id="cardNumber" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="cardName" required>
         </div>
-
-        <div class="cardNo-attributes" *ngIf="!isCardNumberValid">Invalid Card Number</div>
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-120">Bank Routing Number</label>
+            <input type="text" id="cardNumber"  class="wd-300 input-attributes" maxlength="9"
+                name="cardNumber" [(ngModel)]="routingNumber" required>
+        </div>
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-160">Account Number</label>
+            <input type="text" id="cardNumber" (input)="validateAccountNumber()" class="wd-300 input-attributes" maxlength="17"
+                name="cardNumber" [(ngModel)]="accountNumber" required>
+        </div>
 
         <div class="mr-t-20">
-            <label for="expirationDate" class="mr-r-35">Expiration Date(mm/yy)</label>
-            <input type="text" id="expirationDate" (input)="validateExpiryDate($event)" name="expirationDate"
-                class="input-attributes" [(ngModel)]="expireDate" required>
+            <label for="cardNumber" class="mr-r-103">Re-enter Account Number</label>
+            <input type="text" id="cardNumber" (input)="validateAccountNumber()"  maxlength="17" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="reEnteraccountNumber" required>
         </div>
-        <div class="cardNo-attributes" *ngIf="!isDateValid">Invalid Date Format</div>
-        <div class="cardNo-attributes" *ngIf="isDateValid && !isMonthValid">Invalid Month</div>
-        <div class="cardNo-attributes" *ngIf="isDateValid && isMonthValid && !isFutureDate">Expiry Date Must be a Future
-            Date</div>
 
-        <div class="mr-t-20">
-            <label for="cvv" class="mr-r-156">CVV</label>
-            <input type="text" id="cvv" name="cvv" (input)="validateCvv($event)" class="input-attributes"
-                [(ngModel)]="cvv" required>
-        </div>
-        <div class="cardNo-attributes" *ngIf="!isCvvValid">Invalid CVV</div>
+        <div class="phNo-attributes" *ngIf="showAccNumError">Checking ACcount number do not match</div>
 
         <div class="mr-t-20">
             <button type="submit" class="btn-attributes" (click)="addAccount()">Ok</button>

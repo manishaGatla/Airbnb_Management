@@ -33,9 +33,11 @@ export class HostPage implements OnInit {
   completedStatusId: any;
   approvedStatusId: any;
   cancelledStatusId: any;
+  showNewAmenty: boolean = false;
+  amentyName: any;
+  NewAmenty: any;
 
   ngOnInit(): void {
-    this.getStatuses();
     this.getAmenties();
     this.getRoomTypes();
     this.getGuests();
@@ -52,12 +54,6 @@ export class HostPage implements OnInit {
   getStatuses() {
     this.airbnbService.getStatusMasterData().subscribe((res) => {
       this.statuses = res;
-      res.forEach((c: any)=>{
-        if(c.name == "Pending") this.pendingStatusId = c._id;
-        if(c.name == "Completed") this.completedStatusId = c._id;
-        if(c.name == "Cancelled") this.cancelledStatusId = c._id;
-        if(c.name == "Approved") this.approvedStatusId = c._id;
-      })
     })
   }
 
@@ -68,26 +64,6 @@ export class HostPage implements OnInit {
     this.pendingStays = [];
     this.airbnbService.getStaysByEmail(this.airbnbService.userId).subscribe((res) => {
       this.staysAvaliable = res;
-
-      this.staysAvaliable.forEach((stay: any) => {
-        if (stay.statusId == this.cancelledStatusId) {
-          this.cancelledStays.push(stay);
-          stay.status = "Cancelled";
-        }
-        else if (stay.statusId == this.approvedStatusId) {
-          this.approvedStays.push(stay);
-          stay.status = "Approved";
-        }
-        else if (stay.statusId == this.completedStatusId) {
-          this.reservedStays.push(stay);
-          stay.status = "Completed";
-        }
-        else if (stay.statusId == this.pendingStatusId) {
-          this.pendingStays.push(stay);
-          stay.status = "Pending";
-        }
-
-      })
     })
   }
 
@@ -106,6 +82,19 @@ export class HostPage implements OnInit {
       this.roomTypes = res;
       this.sharedRoomTypeId = this.roomTypes.find((room : any) => room.name == 'Shared room')._id;
     })
+  }
+
+  amentyCHecked(){
+    if(this.amenities.find((am: any) =>am.name == 'Other' && am.checked)){
+      this.showNewAmenty = true;
+    }
+    else{
+      this.showNewAmenty = false;
+    }
+  }
+
+  AddNewAmenty(){
+    this.NewAmenty = {"name" : this.amentyName};
   }
 
   resetFields() {
@@ -128,12 +117,10 @@ export class HostPage implements OnInit {
       "roomTypeId": "",
       "imgUrl" : null,
       "hostId": "",
-      "statusId": this.pendingStatusId,
-      "checkIn": null,
-      "checkOut": null,
       "paymentId": "",
       "NoOfGuests" : null,
-      "NoOfGuestsBooked" : 0
+      "NoOfGuestsBooked" : 0,
+      "isAvaliable": 0
     };
     this.amenities?.forEach((amenty: any) => {
       amenty.checked = false
@@ -196,7 +183,6 @@ export class HostPage implements OnInit {
       this.stayDetails = res[0];
       this.stayDetails.amenities = [];
       this.stayDetails.roomType = this.roomTypes.find((v: any) => v._id == res[0].roomTypeId).name;
-      this.stayDetails.status = this.statuses.find((v: any) => v._id == this.stayDetails.statusId).name;
       
       if (this.stayDetails.guestId && this.stayDetails.guestId.length  > 0) {
         const distinctGuests = this.stayDetails.guestId.filter(
@@ -210,7 +196,7 @@ export class HostPage implements OnInit {
       }
       this.stayDetails.amenitiesId.forEach((id: any) => {
         let amenty = this.amenities.find((id2: any) => id2._id == id).name;
-        this.stayDetails.amenities.push(amenty);
+       if(amenty != 'Other') this.stayDetails.amenities.push(amenty);
       })
       this.showDetailsView = true;
     })
@@ -232,18 +218,33 @@ export class HostPage implements OnInit {
 
   addAirbnbStay() {
     this.amenities.forEach((c: any) => {
-      if (c.checked)
+      if (c.checked && c.name != 'Other')
         this.room.amenitiesId.push(c._id);
     })
-    this.room.checkIn = new Date(this.room.checkIn);
-    this.room.checkOut = new Date(this.room.checkOut);
-    let url = this.room.url;
     this.room.hostId = this.airbnbService.userId;
-    this.airbnbService.addStay(this.room).subscribe((res) => {
-      alert("Stay Added successfully and sent for approval to Admin");
-      this.resetFields();
-      this.getStays();
-    })
+    if(this.NewAmenty && this.NewAmenty.name){
+      let req = {
+        details : this.NewAmenty}
+      this.airbnbService.addAmenity(req).subscribe((res) =>{
+        this.room.amenitiesId.push(res.insertedId);
+        this.airbnbService.addStay(this.room).subscribe((res) => {
+          alert("Stay Added successfully and sent for approval to Admin");
+          this.resetFields();
+          this.getStays();
+          this.getAmenties();
+        })
+      })
+     
+    }
+    else{
+      this.airbnbService.addStay(this.room).subscribe((res) => {
+        alert("Stay Added successfully and sent for approval to Admin");
+        this.resetFields();
+        this.getStays();
+      })
+    }
+    
+    
   }
 
 

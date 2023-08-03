@@ -25,13 +25,15 @@ export class AdminPage implements OnInit {
   completedStatusId: any;
   approvedStatusId: any;
   cancelledStatusId: any;
+  selectedAvailability: any;
+  avaliablityOptions =['Yes', 'No'];
+  
   constructor(private airbnbNodeService: AirbnbNodeService) { }
 
 
   ngOnInit(): void {
     this.getRoomTypes();
     this.getAmenties();
-    this.getStatuses();
     this.getAvaliableStays();
     this.getHosts();
     this.getGuests();
@@ -54,11 +56,6 @@ export class AdminPage implements OnInit {
     this.airbnbNodeService.getStatusMasterData().subscribe((res) => {
       this.statuses = res;
       this.allStatuses = res;
-      this.pendingStatusId = this.statuses.find((c: any) => c.name == "Pending")._id;
-      this.completedStatusId = this.statuses.find((c: any) => c.name == "Completed")._id;
-      this.cancelledStatusId = this.statuses.find((c: any) => c.name == "Cancelled")._id;
-      this.approvedStatusId = this.statuses.find((c: any) => c.name == "Approved")._id;
-      this.statuses = this.statuses.filter((c: any) => c.name != "Pending" && c.name != "Completed")
     })
   }
 
@@ -85,24 +82,6 @@ export class AdminPage implements OnInit {
     this.pendingStays = [];
     this.airbnbNodeService.getAllStays().subscribe((res) => {
       this.allStays = res;
-      this.allStays.forEach((stay: any) => {
-        if (stay.statusId == this.cancelledStatusId) {
-          this.cancelledStays.push(stay);
-          stay.status = "Cancelled";
-        }
-        else if (stay.statusId == this.approvedStatusId) {
-          this.approvedStays.push(stay);
-          stay.status = "Approved";
-        }
-        else if (stay.statusId == this.completedStatusId) {
-          this.reservedStays.push(stay);
-          stay.status = "Completed";
-        }
-        else if (stay.statusId == this.pendingStatusId) {
-          this.pendingStays.push(stay);
-          stay.status = "Pending";
-        }
-      })
     })
 
   }
@@ -125,11 +104,10 @@ export class AdminPage implements OnInit {
           this.stayDetails.guestPhone = this.stayDetails.guestPhone == null ? this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber : this.stayDetails.guestPhone + ', ' +this.allGuests.find((guest: any) => guest._id == guestBooked).phoneNumber ;;
         })
       }
-      this.stayDetails.status = this.allStatuses.find((v: any) => v._id == this.stayDetails.statusId).name;
       this.stayDetails.roomType = this.roomTypes.find((v: any) => v._id == res[0].roomTypeId).name;
       this.stayDetails.amenitiesId.forEach((id: any) => {
         let amenty = this.amenities.find((id2: any) => id2._id == id).name;
-        this.stayDetails.amenities.push(amenty);
+        if(amenty != 'Other') this.stayDetails.amenities.push(amenty);
 
 
       })
@@ -138,7 +116,7 @@ export class AdminPage implements OnInit {
 
   updateStay(stay: any) {
     this.airbnbNodeService.updateStayStatus({
-      id: stay._id, statusId: this.statusId
+      id: stay._id, isAvaliable: this.selectedAvailability == 'yes' ? 1 : 0
     }).subscribe((res) => {
       alert("Status Updated Successfully");
       this.resetFields();

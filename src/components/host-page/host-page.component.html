@@ -1,57 +1,11 @@
-<section *ngIf="!showDetailsView && !addBtnClicked && pendingStays.length > 0">
-  <h2>Pending stays for Approval</h2>
-  <span *ngFor="let stay of pendingStays" class="inline-style">
+<section *ngIf="!showDetailsView && !addBtnClicked">
+  <span *ngFor="let stay of staysAvaliable" class="inline-style">
     <p class="p-title">{{stay.title}}</p>
     <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
   </span>
 
 
 </section>
-
-<section *ngIf="!showDetailsView && !addBtnClicked && approvedStays.length >0">
-  <h2>Approved stays </h2>
-  <span *ngFor="let stay of approvedStays" class="inline-style">
-    <p class="p-title">{{stay.title}}</p>
-    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
-  </span>
-
-
-</section>
-
-<section *ngIf="!showDetailsView && !addBtnClicked && reservedStays.length > 0">
-  <h2>Reserved stays</h2>
-  <span *ngFor="let stay of reservedStays" class="inline-style">
-    <p class="p-title">{{stay.title}}</p>
-    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
-  </span>
-
-
-</section>
-
-<section *ngIf="!showDetailsView && !addBtnClicked && cancelledStays.length > 0">
-  <h2>Cancelled Stays by Admin</h2>
-  <span *ngFor="let stay of cancelledStays" class="inline-style">
-    <p class="p-title">{{stay.title}}</p>
-    <img class="img-attributes" [src]="stay.imgUrl" alt="Stay Image" (click)="navigateToDetails(stay._id)">
-  </span>
-
-
-</section>
-
-<section>
-
-  <dialog #dialog>
-    {{bookingDoneMsg}}
-    <div>
-      <button (click)="dialog.close()">OK</button>
-    </div>
-  </dialog>
-
-  <button id="dialogOpen" hidden (click)="dialog.showModal()">Show dialog</button>
-
-</section>
-
-
 
 <section *ngIf="showDetailsView && !addBtnClicked">
   <div class="details-container">
@@ -61,16 +15,13 @@
     <div class="details-section">
       <h2>{{ stayDetails.description }}</h2>
       <div class="flex-1">
-        <p>Price: {{ stayDetails.price }}</p>
+        <p>Price Per Night: ${{ stayDetails.price }}</p>
       </div>
       <div class="flex-1">
         <p>Room Type: {{ stayDetails.roomType }}</p>
       </div>
       <div class="flex-1">
         <p>Amenities: {{ stayDetails.amenities.join(', ') }}</p>
-      </div>
-      <div class="flex-1">
-        <p>status : {{stayDetails.status }}</p>
       </div>
       <div class="flex-1">
         <p>Street: {{ stayDetails.street }}</p>
@@ -83,12 +34,6 @@
       </div>
       <div class="flex-1">
         <p>Country: {{ stayDetails.country }}</p>
-      </div>
-      <div class="flex-1">
-        <p>Check In : {{stayDetails.checkIn | date}}</p>
-      </div>
-      <div class="flex-1">
-        <p>Check Out : {{stayDetails.checkOut |date}}</p>
       </div>
       <div class="flex-1">
         <p *ngIf="stayDetails.guestId">Guest Name: {{stayDetails.guestName }}</p>
@@ -120,10 +65,10 @@
   </div>
 
   <div class="mr-t-20">
-    <label for="price" class="mr-r-10">Price <span class="required-symbol">*</span> :</label>
+    <label for="price" class="mr-r-10">Price Per Night (in $)<span class="required-symbol">*</span> :</label>
     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" [(ngModel)]="room.price">
     <label for="roomType">Room Type <span class="required-symbol">*</span>:</label>
-    <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="room.roomTypeId">
+    <select class="select-attributes  mr-r-10" id="roomType" name="roomType" [(ngModel)]="room.roomTypeId">
       <option *ngFor="let item of roomTypes" [value]="item._id">{{ item.name }}</option>
     </select>
     <label for="price" *ngIf = "room.roomTypeId == sharedRoomTypeId" class="mr-r-10">No of Guests <span class="required-symbol">*</span> :</label>
@@ -153,19 +98,15 @@
   </div>
 
   <div class="mr-t-20">
-    <label for="checkIn" class="mr-r-10">CheckIn <span class="required-symbol">*</span>:</label>
-    <input type="date" id="checkIn" class="mr-r-10 input-attributes" name="checkIn" (change)="validateDates()" [(ngModel)]="room.checkIn">
-    <label for="checkOut" class="mr-r-10">Check Out <span class="required-symbol">*</span>:</label>
-    <input type="date" id="checkOut" class="mr-r-10 input-attributes" name="checkOut" (change)="validateDates()" [(ngModel)]="room.checkOut">
-  </div>
-
-  <div class="mr-t-20">
     <label for="amenities">Amenities:</label>
     <div class="mr-t-20" *ngFor="let amenity of amenities">
       <label class="mr-l-10">
-        <input type="checkbox" class="scale-1" [(ngModel)]="amenity.checked">
+        <input type="checkbox" class="scale-1" [(ngModel)]="amenity.checked" (change)="amentyCHecked()">
         {{ amenity.name }}
       </label>
+    </div>
+    <div class="mr-t-20" *ngIf="showNewAmenty">
+      <input type="text" id="amenty" class="mr-r-10 input-attributes" name="amenty" [(ngModel)]="amentyName" (change)="AddNewAmenty()">
     </div>
   </div>
 

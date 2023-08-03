@@ -26,17 +26,6 @@
 
             </div>
             <div class=" mr-t-20">
-                <label for="checkIn" class="mr-r-97">Check In:</label>
-                <input type="date" id="checkIn" class="input-attributes" name="checkIn"
-                    [(ngModel)]="searchForm.checkIn">
-            </div>
-            <div class=" mr-t-20">
-                <label for="checkOut" class="mr-r-86">Check Out:</label>
-                <input type="date" id="checkOut" class="input-attributes" name="checkOut"
-                    [(ngModel)]="searchForm.checkOut">
-
-            </div>
-            <div class=" mr-t-20">
                 <button type="submit" class="mr-t-20 btn-attributes" (click)="searchStays()">Search</button>
                 <button type="submit" class="mr-t-20 btn-attributes" (click)="viewStaysReservedByUser()">View Reserved
                     Stays</button>
@@ -87,7 +76,7 @@
             <div class="details-section">
                 <h2>{{ stayDetails.description }}</h2>
                 <div class="flex-1">
-                    <p>Price: {{ stayDetails.price }}</p>
+                    <p>Price Per Night: ${{ stayDetails.price }}</p>
                 </div>
                 <div class="flex-1">
                     <p>Room Type: {{ stayDetails.roomType }}</p>
@@ -98,7 +87,7 @@
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Street: {{ stayDetails.street }}</p>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>City: {{ stayDetails.city }}</p>
                 </div>
                 <div class="flex-1">
@@ -107,24 +96,26 @@
                 <div class="flex-1">
                     <p>Country: {{ stayDetails.country }}</p>
                 </div>
-                <div class="flex-1">
-                    <p>Check In : {{stayDetails.checkIn | date}}</p>
-                </div>
-                <div class="flex-1">
-                    <p>Check Out : {{stayDetails.checkOut |date}}</p>
-                </div>
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Name: {{stayDetails.hostName }}</p>
                 </div>
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Contact : {{stayDetails.hostPhone}}</p>
                 </div>
-                <div class="flex-1" *ngIf = "stayDetails.roomType == 'shared room' && !viewStaysClicked">
+                <div class="flex-1" *ngIf = "stayDetails.roomType == 'Shared room' && !viewStaysClicked">
                     <label for="price"  class="mr-r-10">No of Guests For Booking<span class="required-symbol">*</span> :</label>
                     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" (change)="checkNoofGuestsValidation()" [(ngModel)]="NoofGuests">
                 </div>
                 <div class="cardNo-attributes" *ngIf="checkNoofGuestsValidation()">No of Guests exceeded then the mentioned no of guests by host. The max no of guests allowed are 
                     {{this.stayDetails.NoOfGuests - this.stayDetails.NoOfGuestsBooked}}</div>
+                <div class="mr-t-20">
+                    <label for="checkIn" class="mr-r-10">CheckIn <span class="required-symbol">*</span>:</label>
+                    <input type="date" id="checkIn" class="mr-r-10 input-attributes" name="checkIn" (change)="validateDates()" [(ngModel)]="checkIn">
+                    <label for="checkOut" class="mr-r-10">Check Out <span class="required-symbol">*</span>:</label>
+                    <input type="date" id="checkOut" class="mr-r-10 input-attributes" name="checkOut" (change)="validateDates()" [(ngModel)]="checkOut">
+                </div>
+                <div class="cardNo-attributes" *ngIf="showError">No avaliability in the selected dates</div>
+                
             </div>
 
         </div>
@@ -138,19 +129,19 @@
     </section>
 
     <section *ngIf="isBookingClicked && !isAddNewAccountClicked" class="mr-l-20">
-
+        
         <div class="mr-t-20">
             <h2>Enter payment details</h2>
         </div>
         <div class="mr-t-20" *ngIf="accountsAvaliable && accountsAvaliable.length > 0">
             <label>Choose Card</label>
             <select class="select-attributes" [(ngModel)]="cardSelected">
-                <option *ngFor="let account of accountsAvaliable" [value]="account._id">{{ account.cardNumber }}
+                <option *ngFor="let account of accountsAvaliable" [value]="account._id">{{ account.accountNumber }}
                 </option>
             </select>
 
         </div>
-
+       
         <div class="mr-t-20">
             <button type="submit" *ngIf="isBookingClicked && accountsAvaliable &&  accountsAvaliable.length > 0"
                 [disabled]="!cardSelected" class="btn-attributes" (click)="bookNowAction()">Ok</button>
@@ -162,47 +153,39 @@
     </section>
 
     <section *ngIf="isAddNewAccountClicked">
-        <div class="mr-t-20">
-            <h2>Enter Account details</h2>
-        </div>
-
+      
         <div class="mr-t-20">
             <label>Choose Account Type</label>
             <select class="select-attributes" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
-                <option value="credit">Credit Card</option>
-                <option value="debit">Debit Card</option>
+                <option value="saving account">Saving Account</option>
+                <option value="checking account">Checking Account</option>
             </select>
         </div>
-
-
         <div class="mr-t-20">
-            <label for="cardNumber" class="mr-r-103">Card Number</label>
-            <input type="text" id="cardNumber" (input)="validateCardNumber($event)" class="wd-300 input-attributes"
-                name="cardNumber" [(ngModel)]="cardNumber" required>
+            <label for="cardNumber" class="mr-r-145">Name On Account</label>
+            <input type="text" id="cardNumber" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="cardName" required>
+        </div>
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-120">Bank Routing Number</label>
+            <input type="text" id="cardNumber"  class="wd-300 input-attributes" maxlength="9"
+                name="cardNumber" [(ngModel)]="routingNumber" required>
+        </div>
+        <div class="mr-t-20">
+            <label for="cardNumber" class="mr-r-160">Account Number</label>
+            <input type="text" id="cardNumber" (input)="validateAccountNumber()" class="wd-300 input-attributes" maxlength="17"
+                name="cardNumber" [(ngModel)]="accountNumber" required>
         </div>
 
-        <div class="cardNo-attributes" *ngIf="!isCardNumberValid">Invalid Card Number</div>
-
         <div class="mr-t-20">
-            <label for="expirationDate" class="mr-r-35">Expiration Date(mm/yy)</label>
-            <input type="text" id="expirationDate" (input)="validateExpiryDate($event)" name="expirationDate"
-                class="input-attributes" [(ngModel)]="expireDate" required>
+            <label for="cardNumber" class="mr-r-103">Re-enter Account Number</label>
+            <input type="text" id="cardNumber" (input)="validateAccountNumber()"  maxlength="17" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="reEnteraccountNumber" required>
         </div>
-        <div class="cardNo-attributes" *ngIf="!isDateValid">Invalid Date Format</div>
-        <div class="cardNo-attributes" *ngIf="isDateValid && !isMonthValid">Invalid Month</div>
-        <div class="cardNo-attributes" *ngIf="isDateValid && isMonthValid && !isFutureDate">Expiry Date Must be a Future
-            Date</div>
 
-        <div class="mr-t-20">
-            <label for="cvv" class="mr-r-156">CVV</label>
-            <input type="text" id="cvv" name="cvv" (input)="validateCvv($event)" class="input-attributes"
-                [(ngModel)]="cvv" required>
-        </div>
-        <div class="cardNo-attributes" *ngIf="!isCvvValid">Invalid CVV</div>
-
+        <div class="phNo-attributes" *ngIf="showAccNumError">Checking Account number do not match</div>
         <div class="mr-t-20">
             <button type="submit" class="btn-attributes" (click)="bookNowAction()">Ok</button>
             <button class="mr-t-20 btn-attributes" (click)="resetFields()">Back</button>
         </div>
-
     </section>
