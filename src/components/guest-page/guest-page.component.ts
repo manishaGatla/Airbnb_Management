@@ -14,7 +14,9 @@ export class GuestPage implements OnInit {
     country: null,
     city: null,
     minPrice: null,
-    maxPrice: null
+    maxPrice: null,
+    checkIn : null,
+    checkOut : null
   };
   roomTypes: any;
   isCardNumberValid: boolean = true;

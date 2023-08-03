@@ -235,6 +235,8 @@ export class HostPage implements OnInit {
       if (c.checked)
         this.room.amenitiesId.push(c._id);
     })
+    this.room.checkIn = new Date(this.room.checkIn);
+    this.room.checkOut = new Date(this.room.checkOut);
     let url = this.room.url;
     this.room.hostId = this.airbnbService.userId;
     this.airbnbService.addStay(this.room).subscribe((res) => {

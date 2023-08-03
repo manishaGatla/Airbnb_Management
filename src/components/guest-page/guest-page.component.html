@@ -26,6 +26,17 @@
 
             </div>
             <div class=" mr-t-20">
+                <label for="checkIn" class="mr-r-97">Check In:</label>
+                <input type="date" id="checkIn" class="input-attributes" name="checkIn"
+                    [(ngModel)]="searchForm.checkIn">
+            </div>
+            <div class=" mr-t-20">
+                <label for="checkOut" class=" mr-r-86">Check Out:</label>
+                <input type="date" id="checkOut" class="input-attributes" name="checkOut"
+                    [(ngModel)]="searchForm.checkOut">
+
+            </div>
+            <div class=" mr-t-20">
                 <button type="submit" class="mr-t-20 btn-attributes" (click)="searchStays()">Search</button>
                 <button type="submit" class="mr-t-20 btn-attributes" (click)="viewStaysReservedByUser()">View Reserved
                     Stays</button>
@@ -96,10 +107,10 @@
                 <div class="flex-1">
                     <p>Country: {{ stayDetails.country }}</p>
                 </div>
-                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
+                <div class="flex-1">
                     <p>Check In : {{stayDetails.checkIn | date}}</p>
                 </div>
-                <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
+                <div class="flex-1">
                     <p>Check Out : {{stayDetails.checkOut |date}}</p>
                 </div>
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
@@ -108,7 +119,7 @@
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Contact : {{stayDetails.hostPhone}}</p>
                 </div>
-                <div class="flex-1" *ngIf = "stayDetails.roomType == 'Private room' && !viewStaysClicked">
+                <div class="flex-1" *ngIf = "stayDetails.roomType == 'shared room' && !viewStaysClicked">
                     <label for="price"  class="mr-r-10">No of Guests For Booking<span class="required-symbol">*</span> :</label>
                     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" (change)="checkNoofGuestsValidation()" [(ngModel)]="NoofGuests">
                 </div>

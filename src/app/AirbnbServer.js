@@ -124,7 +124,7 @@ app.get('/api/stays', async (req, res) => {
 })
 
 app.post('/api/stays/search', (req, res) => {
-  const { country, city, minPrice, maxPrice, amenitiesId } = req.body;
+  const { country, city, minPrice, maxPrice, amenitiesId, checkIn , checkOut } = req.body;
   const collection = client.db('Airbnb_Management').collection('Airbnb_Listings');
   const query = {};
   if (country != null && country != '') {
@@ -133,6 +133,15 @@ app.post('/api/stays/search', (req, res) => {
       $options: 'i'
     }
   }
+
+  if (checkIn != null && checkOut != '' 
+  && checkOut != null && checkIn != undefined && 
+  checkOut != undefined && checkIn!= '') 
+  {
+    query['checkIn'] = { $lte: checkIn };
+    query['checkOut'] = { $gte: checkOut };
+  }
+
 
   if (city != null && city != '') {
     query['city'] = {
