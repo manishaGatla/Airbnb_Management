@@ -123,7 +123,7 @@
     <label for="price" class="mr-r-10">Price <span class="required-symbol">*</span> :</label>
     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" [(ngModel)]="room.price">
     <label for="roomType">Room Type <span class="required-symbol">*</span>:</label>
-    <select class="select-attributes" id="roomType" name="roomType" [(ngModel)]="room.roomTypeId">
+    <select class="select-attributes  mr-r-10" id="roomType" name="roomType" [(ngModel)]="room.roomTypeId">
       <option *ngFor="let item of roomTypes" [value]="item._id">{{ item.name }}</option>
     </select>
     <label for="price" *ngIf = "room.roomTypeId == sharedRoomTypeId" class="mr-r-10">No of Guests <span class="required-symbol">*</span> :</label>

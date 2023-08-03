@@ -119,7 +119,7 @@
                 <div class="flex-1" *ngIf="checkUserAGuest() && viewStaysClicked">
                     <p>Host Contact : {{stayDetails.hostPhone}}</p>
                 </div>
-                <div class="flex-1" *ngIf = "stayDetails.roomType == 'shared room' && !viewStaysClicked">
+                <div class="flex-1" *ngIf = "stayDetails.roomType == 'Shared room' && !viewStaysClicked">
                     <label for="price"  class="mr-r-10">No of Guests For Booking<span class="required-symbol">*</span> :</label>
                     <input type="number" id="price" class="mr-r-10 input-attributes" name="price" (change)="checkNoofGuestsValidation()" [(ngModel)]="NoofGuests">
                 </div>
