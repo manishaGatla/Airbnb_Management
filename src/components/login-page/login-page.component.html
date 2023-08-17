@@ -149,6 +149,12 @@
             <input type="text" id="cardNumber" class="wd-300 input-attributes"
                 name="cardNumber" [(ngModel)]="cardName" required>
         </div>
+
+        <div class="mr-t-20">
+            <label for="expireDate" class="mr-r-145">Expiry Date</label>
+            <input type="date" id="expiryDate" class="wd-300 input-attributes"
+                name="expiryDate" [(ngModel)]="expiryDate" (change) ="validateExpiryDate($event)"required>
+        </div>
         <div class="mr-t-20">
             <label for="cardNumber" class="mr-r-120">Bank Routing Number</label>
             <input type="text" id="cardNumber"  class="wd-300 input-attributes" maxlength="9"
