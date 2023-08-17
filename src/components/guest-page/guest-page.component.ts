@@ -154,7 +154,8 @@ export class GuestPage implements OnInit {
         this.staysReserved = res;
       }
       else {
-        alert('No Reserved Stays');
+        //alert('No Reserved Stays');
+        this.resetFields();
       }
     })
   }
@@ -174,7 +175,7 @@ export class GuestPage implements OnInit {
 
       }
       else {
-        alert("No results for the above search");
+        //alert("No results for the above search");
         this.isSearchClicked = false;
         this.resetFields();
       }
@@ -194,12 +195,12 @@ export class GuestPage implements OnInit {
       const checkOutDate = this.checkOut;
   
       if (checkInDate < currentDate) {
-        alert('Check-in date should be the current date or later.');
+        //alert('Check-in date should be the current date or later.');
         this.checkIn = null; 
       }
   
       if (checkOutDate <= checkInDate) {
-        alert('Check-out date should be after the check-in date.');
+        //alert('Check-out date should be after the check-in date.');
         this.checkOut = null; 
       }
     }
@@ -220,6 +221,10 @@ export class GuestPage implements OnInit {
         this.stayDetails.hostName = this.allHosts.find((host: any) => host._id == this.stayDetails.hostId).name;
         this.stayDetails.hostPhone = this.allHosts.find((host: any) => host._id == this.stayDetails.hostId).phoneNumber;
       }
+      let bookingDetails = this.allBookings.filter((c:any) => c.listingId == this.stayDetails._id && c.guestId == this.airbnbNodeService.userId )[0];
+      this.stayDetails.checkIn = bookingDetails.checkIn;
+      this.stayDetails.checkOut = bookingDetails.checkOut;
+
       this.stayDetails.roomType = this.roomTypes.find((v: any) => v._id == res[0].roomTypeId).name;
       this.stayDetails.amenitiesId.forEach((id: any) => {
         let amenty = this.amenities.find((id2: any) => id2._id == id).name;
@@ -256,23 +261,25 @@ export class GuestPage implements OnInit {
   }
 
   addNewAccountAndCompletePayment() {
+    let numberOfNights=this.getNumberOfNights();
     const modifiedCardNumber = '************' + this.accountNumber.substring(12);
     let accountDetails = {
       "userId": this.airbnbNodeService.userId,
-      "balance": this.NoofGuests != null ? Number(Number("5000") - Number(Number(this.stayDetails.price)* Number(this.NoofGuests) * Number(this.checkOut- this.checkIn)))  :Number(Number("5000") - (Number(this.stayDetails.price) * Number(this.checkOut - this.checkIn)) ),
+      "balance": this.NoofGuests != null ? Number(Number("5000") - Number(Number(this.stayDetails.price)* Number(this.NoofGuests) * numberOfNights))  :Number(Number("5000") - (Number(this.stayDetails.price) * numberOfNights) ),
       "isGuest": 1,
       "isHost": 0,
       "isAdmin": 0,
       "accountType": this.selectedPaymentMethod,
       "accountNumber": this.accountNumber,
       "cardName" : this.cardName,
-      "routingNumber": this.routingNumber
+      "routingNumber": this.routingNumber,
+      "expireDate":this.expireDate
     }
     if (this.accountsAvaliable && this.accountsAvaliable.length > 0) {
       this.airbnbNodeService.deleteAccount(this.accountsAvaliable[0]._id).subscribe((results) => {
         this.airbnbNodeService.addAccount(accountDetails).subscribe((res) => {
           if (res.insertedId != null) {
-            // alert("Account Added Successfully");
+            // //alert("Account Added Successfully");
             this.paymentCompletionProcess();
           }
         })
@@ -281,7 +288,7 @@ export class GuestPage implements OnInit {
     else {
       this.airbnbNodeService.addAccount(accountDetails).subscribe((res) => {
         if (res.insertedId != null) {
-          // alert("Account Added Successfully");
+          // //alert("Account Added Successfully");
           this.paymentCompletionProcess();
         }
       })

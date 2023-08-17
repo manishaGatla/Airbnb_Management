@@ -118,7 +118,7 @@ export class AdminPage implements OnInit {
     this.airbnbNodeService.updateStayStatus({
       id: stay._id, isAvaliable: this.selectedAvailability == 'yes' ? 1 : 0
     }).subscribe((res) => {
-      alert("Status Updated Successfully");
+      //alert("Status Updated Successfully");
       this.resetFields();
       this.cancelledStays = [];
       this.approvedStays = [];

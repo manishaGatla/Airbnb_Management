@@ -146,12 +146,12 @@ export class HostPage implements OnInit {
       const checkOutDate = this.room.checkOut;
   
       if (checkInDate < currentDate) {
-        alert('Check-in date should be the current date or later.');
+        //alert('Check-in date should be the current date or later.');
         this.room.checkIn = null; 
       }
   
       if (checkOutDate <= checkInDate) {
-        alert('Check-out date should be after the check-in date.');
+        //alert('Check-out date should be after the check-in date.');
         this.room.checkOut = null; 
       }
     }
@@ -210,7 +210,7 @@ export class HostPage implements OnInit {
 
   deleteAirbnb(id: any) {
     this.airbnbService.deleteStay(id).subscribe((res) => {
-      alert("Deleted Successfully");
+      //alert("Deleted Successfully");
       this.resetFields();
       this.getStays();
     })
@@ -228,7 +228,7 @@ export class HostPage implements OnInit {
       this.airbnbService.addAmenity(req).subscribe((res) =>{
         this.room.amenitiesId.push(res.insertedId);
         this.airbnbService.addStay(this.room).subscribe((res) => {
-          alert("Stay Added successfully and sent for approval to Admin");
+          //alert("Stay Added successfully and sent for approval to Admin");
           this.resetFields();
           this.getStays();
           this.getAmenties();
@@ -238,7 +238,7 @@ export class HostPage implements OnInit {
     }
     else{
       this.airbnbService.addStay(this.room).subscribe((res) => {
-        alert("Stay Added successfully and sent for approval to Admin");
+        //alert("Stay Added successfully and sent for approval to Admin");
         this.resetFields();
         this.getStays();
       })

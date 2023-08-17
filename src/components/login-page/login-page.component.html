@@ -118,7 +118,7 @@
     <section *ngIf="accountsSectionClicked && !isAccountAddClicked" class="mr-l-20">
         <div *ngFor="let account of accountsAvaliable" class="inline-style card-att">
             <div class="mr-r-20">Account Number: {{ account.modifiedAccNumber }}</div>
-            <div class="mr-r-20">Account Type: {{ account.cardType }}</div>
+            <div class="mr-r-20">Account Type: {{ account.accountType }}</div>
             <div class="mr-r-20">Balance: {{ account.balance }}</div>
             <span class="mr-r-20"><button type="button" (click)="deleteAccount(account._id)">
                     <img [src]='deleteIcon' class="icon-attributes" alt="Delete">
@@ -140,8 +140,10 @@
         <div class="mr-t-20">
             <label>Choose Account Type</label>
             <select class="select-attributes" [(ngModel)]="selectedPaymentMethod" name="paymentMethod">
-                <option value="saving account">Saving Account</option>
-                <option value="checking account">Checking Account</option>
+                <option value="saving account" *ngIf ="!isGuest">Saving Account</option>
+                <option value="checking account" *ngIf ="!isGuest">Checking Account</option>
+                <option value="debit" *ngIf ="isGuest">Debit Card</option>
+                <option value="credit" *ngIf ="isGuest">Credit Card</option>
             </select>
         </div>
         <div class="mr-t-20">
@@ -149,27 +151,39 @@
             <input type="text" id="cardNumber" class="wd-300 input-attributes"
                 name="cardNumber" [(ngModel)]="cardName" required>
         </div>
+        <div class="mr-t-20" *ngIf ="isGuest">
+            <label for="cardNumber" class="mr-r-160">Card Number</label>
+            <input type="text" id="cardNumber"  class="wd-300 input-attributes" maxlength="16"
+                name="cardNumber" [(ngModel)]="accountNumber" required>
+        </div>
 
+        <div class="mr-t-20">
+            <label for="expireDate" class="mr-r-145" *ngIf ="isGuest">Expiry Date(MM/YY)</label>
+            <input type="text" id="expiryDate" class="wd-300 input-attributes"
+                name="expiryDate" [(ngModel)]="expireDate" (change) ="validateExpiryDate($event)"required>
+        </div>
+
+        <div class="mr-t-20" *ngIf ="isGuest">
+            <label for="cardNumber" class="mr-r-103">CVV</label>
+            <input type="text" id="cardNumber"   maxlength="3" class="wd-300 input-attributes"
+                name="cardNumber" [(ngModel)]="cvv" required>
+        </div>
 
         
-
-        <div class="mr-t-20">
-            <label for="expireDate" class="mr-r-145">Expiry Date</label>
-            <input type="date" id="expiryDate" class="wd-300 input-attributes"
-                name="expiryDate" [(ngModel)]="expiryDate" (change) ="validateExpiryDate($event)"required>
-        </div>
-        <div class="mr-t-20">
+        <div class="mr-t-20"  *ngIf ="!isGuest">
             <label for="cardNumber" class="mr-r-120">Bank Routing Number</label>
             <input type="text" id="cardNumber"  class="wd-300 input-attributes" maxlength="9"
                 name="cardNumber" [(ngModel)]="routingNumber" required>
         </div>
-        <div class="mr-t-20">
+        <div class="mr-t-20" *ngIf ="!isGuest">
             <label for="cardNumber" class="mr-r-160">Account Number</label>
             <input type="text" id="cardNumber" (input)="validateAccountNumber()" class="wd-300 input-attributes" maxlength="17"
                 name="cardNumber" [(ngModel)]="accountNumber" required>
         </div>
 
-        <div class="mr-t-20">
+        
+
+        <div class="mr-t-20" *ngIf ="!isGuest">
             <label for="cardNumber" class="mr-r-103">Re-enter Account Number</label>
             <input type="text" id="cardNumber" (input)="validateAccountNumber()"  maxlength="17" class="wd-300 input-attributes"
                 name="cardNumber" [(ngModel)]="reEnteraccountNumber" required>

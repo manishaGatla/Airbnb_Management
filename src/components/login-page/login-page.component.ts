@@ -46,6 +46,7 @@ export class AirbnbLogin implements OnInit {
     originalRoleIdSelected: any;
     showAccNumError: boolean = false;
     accountsAvaliable: any;
+    cvv: any;
 
 
     ngOnInit(): void {
@@ -77,7 +78,7 @@ export class AirbnbLogin implements OnInit {
     }
 
     validateAccountNumber(){
-        if(Number(this.reEnteraccountNumber) != Number(this.accountNumber)){
+        if(Number(this.reEnteraccountNumber) != Number(this.accountNumber) && !this.isGuest){
             this.showAccNumError = true;
         }
         else{
@@ -171,7 +172,7 @@ export class AirbnbLogin implements OnInit {
                         collectionName: 'Airbnb_' + this.allRoles.find((p: any) => p._id == this.roleIdSelected).roleTitle + 's'
                     }
                     this.airbnbServcie.insertNewUser(req).subscribe((res) => {
-                        alert("Updated Successfully");
+                        //alert("Updated Successfully");
                         this.resetFields();
                         this.onLogoutClicked();
                     })
@@ -180,7 +181,7 @@ export class AirbnbLogin implements OnInit {
         }
         else {
             this.airbnbServcie.updateProfile(req).subscribe((res: any) => {
-                alert("Updated Successfully");
+                //alert("Updated Successfully");
                 this.resetFields();
                 this.onLogoutClicked();
 
@@ -222,12 +223,12 @@ export class AirbnbLogin implements OnInit {
                     }
                 }
                 else {
-                    alert("Incorrect password, please enter correct password");
+                    //alert("Incorrect password, please enter correct password");
                 }
 
             }
             else {
-                alert("User not exist, please register");
+                //alert("User not exist, please register");
             }
         })
     }
@@ -268,13 +269,13 @@ export class AirbnbLogin implements OnInit {
         }
         this.airbnbServcie.updatePassword(req).subscribe((res) => {
             if (res.matchedCount > 0 && res.modifiedCount > 0) {
-                alert("Updated Successfully");
+                //alert("Updated Successfully");
                 this.resetFields();
                 this.onLogoutClicked();
                 this.resetPasswordClicked = false;
             }
             else {
-                alert("No user found with the email provided to reset the password");
+                //alert("No user found with the email provided to reset the password");
                 this.resetFields();
                 this.onLogoutClicked();
                 this.resetPasswordClicked = false;
@@ -294,6 +295,7 @@ export class AirbnbLogin implements OnInit {
         this.accountNumber = null;
         this.selectedPaymentMethod = null;
         this.cardName = null;
+        this.cvv = null;
         this.reEnteraccountNumber = null;
         this.isAccountAddClicked = this.airbnbServcie.isAccountAddClicked = true;
     }
@@ -316,11 +318,13 @@ export class AirbnbLogin implements OnInit {
             "isAdmin": this.isAdmin ? 1 : 0,
             "accountType": this.selectedPaymentMethod,
             "accountNumber": this.accountNumber,
-            "routingNumber": this.routingNumber
+            "routingNumber": this.routingNumber,
+            "cvv" :this.cvv,
+            "expireDate": this.expireDate
         }
         this.airbnbServcie.addAccount(req).subscribe((res) => {
             if (res.insertedId != null) {
-                alert("Account Added Successfully");
+                //alert("Account Added Successfully");
                 this.getAccounts();
                 this.isAccountAddClicked = this.airbnbServcie.isAccountAddClicked = false;
             }
